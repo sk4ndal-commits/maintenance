@@ -125,3 +125,23 @@ body {
   background: #dbeafe;
   color: #1d4ed8;
 }
+
+.badge--primary {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge--success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.badge--warning {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.badge--info {
+  background: #e0e7ff;
+  color: #3730a3;
+}

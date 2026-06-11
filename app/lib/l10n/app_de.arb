@@ -1,0 +1,21 @@
+{
+  "@@locale": "de",
+  "appTitle": "Maintenance System",
+  "navAssets": "Assets",
+  "navScan": "Scannen",
+  "assetsTitle": "Assets",
+  "assetsEmpty": "Keine Assets vorhanden.",
+  "assetsLoading": "Lädt…",
+  "assetsErrorLoading": "Fehler beim Laden",
+  "detailLocation": "Standort",
+  "detailDescription": "Beschreibung",
+  "detailCreated": "Erstellt",
+  "detailQrCode": "QR-Code",
+  "detailWorkOrders": "Letzte Work Orders",
+  "detailNoWorkOrders": "Keine Work Orders vorhanden.",
+  "detailError": "Fehler",
+  "statusOpen": "Offen",
+  "statusAssigned": "Zugewiesen",
+  "statusInProgress": "In Bearbeitung",
+  "statusDone": "Abgeschlossen"
+}

@@ -1,4 +1,4 @@
-import type { Asset, AssetListResponse, CreateAssetPayload, UpdateAssetPayload } from '../types/asset'
+import type { Asset, AssetListResponse, CreateAssetPayload, UpdateAssetPayload, WorkOrder } from '../types/asset'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000'
 
@@ -35,6 +35,10 @@ export const assetApi = {
       method: 'PUT',
       body: JSON.stringify(payload),
     })
+  },
+
+  getWorkOrders(id: string, limit = 10): Promise<WorkOrder[]> {
+    return request<WorkOrder[]>(`/api/assets/${id}/work-orders?limit=${limit}`)
   },
 
   delete(id: string): Promise<void> {

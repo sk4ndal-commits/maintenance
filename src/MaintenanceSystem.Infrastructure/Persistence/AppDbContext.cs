@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Asset> Assets => Set<Asset>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,6 +21,14 @@ public class AppDbContext : DbContext
             e.Property(a => a.Location).IsRequired().HasMaxLength(200);
             e.Property(a => a.Description).HasMaxLength(1000);
             e.Property(a => a.QrCodePayload).IsRequired().HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<WorkOrder>(e =>
+        {
+            e.HasKey(w => w.WorkOrderId);
+            e.Property(w => w.Title).IsRequired().HasMaxLength(300);
+            e.Property(w => w.Priority).IsRequired().HasMaxLength(50);
+            e.Property(w => w.Status).HasConversion<string>();
         });
 
         modelBuilder.Entity<AuditLog>(e =>

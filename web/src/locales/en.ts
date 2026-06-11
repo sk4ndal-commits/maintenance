@@ -39,6 +39,15 @@ export default {
     editTitle: 'Edit Asset',
     save: 'Save',
   },
+  detail: {
+    back: 'Back',
+    location: 'Location',
+    description: 'Description',
+    created: 'Created',
+    qrCode: 'QR Code',
+    workOrders: 'Recent Work Orders',
+    noWorkOrders: 'No work orders found.',
+  },
   card: {
     type: 'Type',
     location: 'Location',

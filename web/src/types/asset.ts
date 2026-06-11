@@ -23,6 +23,18 @@ export interface CreateAssetPayload {
   description?: string
 }
 
+export type WorkOrderStatus = 'Open' | 'Assigned' | 'InProgress' | 'Done'
+
+export interface WorkOrder {
+  workOrderId: string
+  assetId: string
+  title: string
+  status: WorkOrderStatus
+  priority: string
+  createdAt: string
+  completedAt?: string
+}
+
 export interface AssetListResponse {
   data: Asset[]
   total: number

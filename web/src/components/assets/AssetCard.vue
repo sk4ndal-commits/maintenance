@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import type { Asset } from '../../types/asset'
 
 const { t, locale } = useI18n()
-defineProps<{ asset: Asset }>()
+const router = useRouter()
+const props = defineProps<{ asset: Asset }>()
 const emit = defineEmits<{ (e: 'edit', asset: Asset): void }>()
 </script>
 
 <template>
-  <div class="asset-card">
+  <div class="asset-card" @click="router.push(`/assets/${props.asset.assetId}`)">
     <div class="asset-card__header">
       <span class="asset-card__type badge">{{ asset.type }}</span>
       <span class="asset-card__date">{{ new Date(asset.createdAt).toLocaleDateString(locale) }}</span>

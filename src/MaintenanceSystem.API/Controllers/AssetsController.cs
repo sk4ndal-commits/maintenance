@@ -1,6 +1,7 @@
 using MaintenanceSystem.Application.Assets.Commands;
 using MaintenanceSystem.Application.Assets.DTOs;
 using MaintenanceSystem.Application.Common.Interfaces;
+using MaintenanceSystem.Application.WorkOrders.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaintenanceSystem.API.Controllers;
@@ -12,12 +13,14 @@ public class AssetsController : ControllerBase
     private readonly CreateAssetHandler _createHandler;
     private readonly UpdateAssetHandler _updateHandler;
     private readonly IAssetRepository _repo;
+    private readonly IWorkOrderRepository _workOrderRepo;
 
-    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo)
+    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo, IWorkOrderRepository workOrderRepo)
     {
         _createHandler = createHandler;
         _updateHandler = updateHandler;
         _repo = repo;
+        _workOrderRepo = workOrderRepo;
     }
 
     [HttpPost]
@@ -55,6 +58,15 @@ public class AssetsController : ControllerBase
         var dto = await _updateHandler.Handle(cmd);
         if (dto is null) return NotFound();
         return Ok(dto);
+    }
+
+    [HttpGet("{id:guid}/work-orders")]
+    public async Task<IActionResult> GetWorkOrders(Guid id, [FromQuery] int limit = 10)
+    {
+        var asset = await _repo.GetByIdAsync(id);
+        if (asset is null) return NotFound();
+        var orders = await _workOrderRepo.GetByAssetIdAsync(id, limit);
+        return Ok(orders.Select(WorkOrderDto.From));
     }
 
     [HttpDelete("{id:guid}")]

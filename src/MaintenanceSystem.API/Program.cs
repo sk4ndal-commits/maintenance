@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ?? "Data Source=maintenance.db"));
 
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+builder.Services.AddScoped<IWorkOrderRepository, WorkOrderRepository>();
 builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<CreateAssetHandler>();
 builder.Services.AddScoped<UpdateAssetHandler>();
@@ -21,7 +22,7 @@ builder.Services.AddScoped<UpdateAssetHandler>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("VueFrontend", policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod());
 });

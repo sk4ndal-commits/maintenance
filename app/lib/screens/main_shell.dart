@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
+import 'asset_list_screen.dart';
+
+const _primaryColor = Color(0xFF1e3a5f);
+
+class MainShell extends StatefulWidget {
+  const MainShell({super.key});
+
+  @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  int _selectedIndex = 0;
+
+  static const _screens = <Widget>[
+    AssetListScreen(),
+    _ScanPlaceholder(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.appTitle),
+        backgroundColor: _primaryColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: SafeArea(child: _screens[_selectedIndex]),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (i) => setState(() => _selectedIndex = i),
+        selectedItemColor: _primaryColor,
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.inventory_2_outlined),
+            activeIcon: const Icon(Icons.inventory_2),
+            label: l10n.navAssets,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.qr_code_scanner_outlined),
+            activeIcon: const Icon(Icons.qr_code_scanner),
+            label: l10n.navScan,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScanPlaceholder extends StatelessWidget {
+  const _ScanPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Icon(Icons.qr_code_scanner, size: 64, color: Color(0xFF1e3a5f)),
+    );
+  }
+}
