@@ -41,6 +41,13 @@ export const assetApi = {
     return request<WorkOrder[]>(`/api/assets/${id}/work-orders?limit=${limit}`)
   },
 
+  async downloadQrCode(id: string): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/assets/${id}/qr-code`)
+    if (!res.ok) throw new Error(`QR error ${res.status}`)
+    const blob = await res.blob()
+    return URL.createObjectURL(blob)
+  },
+
   delete(id: string): Promise<void> {
     return request<void>(`/api/assets/${id}`, { method: 'DELETE' })
   },

@@ -18,6 +18,7 @@ builder.Services.AddScoped<IWorkOrderRepository, WorkOrderRepository>();
 builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<CreateAssetHandler>();
 builder.Services.AddScoped<UpdateAssetHandler>();
+builder.Services.AddScoped<IQrCodeService, QrCodeService>();
 
 builder.Services.AddCors(options =>
 {

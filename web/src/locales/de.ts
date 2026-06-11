@@ -48,6 +48,12 @@ export default {
     workOrders: 'Letzte Work Orders',
     noWorkOrders: 'Keine Work Orders vorhanden.',
   },
+  qr: {
+    title: 'QR-Code',
+    downloadPng: 'PNG herunterladen',
+    print: 'Drucken',
+    errorLoading: 'QR-Code konnte nicht geladen werden',
+  },
   card: {
     type: 'Typ',
     location: 'Standort',

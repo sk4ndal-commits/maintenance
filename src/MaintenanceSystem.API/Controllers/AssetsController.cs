@@ -2,6 +2,7 @@ using MaintenanceSystem.Application.Assets.Commands;
 using MaintenanceSystem.Application.Assets.DTOs;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Application.WorkOrders.DTOs;
+using MaintenanceSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaintenanceSystem.API.Controllers;
@@ -14,13 +15,15 @@ public class AssetsController : ControllerBase
     private readonly UpdateAssetHandler _updateHandler;
     private readonly IAssetRepository _repo;
     private readonly IWorkOrderRepository _workOrderRepo;
+    private readonly IQrCodeService _qrCodeService;
 
-    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo, IWorkOrderRepository workOrderRepo)
+    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo, IWorkOrderRepository workOrderRepo, IQrCodeService qrCodeService)
     {
         _createHandler = createHandler;
         _updateHandler = updateHandler;
         _repo = repo;
         _workOrderRepo = workOrderRepo;
+        _qrCodeService = qrCodeService;
     }
 
     [HttpPost]
@@ -67,6 +70,15 @@ public class AssetsController : ControllerBase
         if (asset is null) return NotFound();
         var orders = await _workOrderRepo.GetByAssetIdAsync(id, limit);
         return Ok(orders.Select(WorkOrderDto.From));
+    }
+
+    [HttpGet("{id:guid}/qr-code")]
+    public async Task<IActionResult> GetQrCode(Guid id)
+    {
+        var asset = await _repo.GetByIdAsync(id);
+        if (asset is null) return NotFound();
+        var png = _qrCodeService.GeneratePng(asset.QrCodePayload);
+        return File(png, "image/png", $"asset-{id}.png");
     }
 
     [HttpDelete("{id:guid}")]

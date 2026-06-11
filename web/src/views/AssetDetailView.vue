@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { assetApi } from '../api/assetApi'
 import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
+import QrCodePanel from '../components/assets/QrCodePanel.vue'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -72,6 +73,9 @@ function statusClass(status: WorkOrderStatus): string {
           <code>{{ asset.qrCodePayload }}</code>
         </div>
       </div>
+
+      <h2 class="asset-detail__section-title">{{ t('qr.title') }}</h2>
+      <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" class="asset-detail__qr" />
 
       <h2 class="asset-detail__section-title">{{ t('detail.workOrders') }}</h2>
 
@@ -149,6 +153,10 @@ function statusClass(status: WorkOrderStatus): string {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 16px;
+}
+
+.asset-detail__qr {
+  margin-bottom: 32px;
 }
 
 .asset-detail__empty {
