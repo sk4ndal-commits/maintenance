@@ -61,6 +61,7 @@ export default {
     priorityLow: 'Niedrig',
     priorityMedium: 'Mittel',
     priorityHigh: 'Hoch',
+    dueDate: 'Fälligkeit',
     create: '+ Work Order erstellen',
     assign: 'Zuweisen',
     assignBtn: 'Zuweisen',

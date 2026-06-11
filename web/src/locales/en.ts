@@ -61,6 +61,7 @@ export default {
     priorityLow: 'Low',
     priorityMedium: 'Medium',
     priorityHigh: 'High',
+    dueDate: 'Due Date',
     create: '+ Create Work Order',
     status: {
       Open: 'Open',

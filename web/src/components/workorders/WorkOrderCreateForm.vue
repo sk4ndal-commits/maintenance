@@ -16,6 +16,7 @@ const form = reactive<CreateWorkOrderPayload>({
   title: '',
   priority: 'Medium',
   description: '',
+  dueDate: undefined,
 })
 
 const loading = ref(false)
@@ -60,6 +61,10 @@ async function submit() {
       <div class="form-group">
         <label for="wo-description">{{ t('form.description') }}</label>
         <textarea id="wo-description" v-model="form.description" rows="3" />
+      </div>
+      <div class="form-group">
+        <label for="wo-duedate">{{ t('wo.dueDate') }}</label>
+        <input id="wo-duedate" v-model="form.dueDate" type="date" />
       </div>
     </details>
 

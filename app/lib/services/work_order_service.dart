@@ -19,4 +19,18 @@ class WorkOrderService {
     final json = jsonDecode(res.body) as Map<String, dynamic>;
     return (json['data'] as List).map((e) => WorkOrder.fromJson(e as Map<String, dynamic>)).toList();
   }
+
+  Future<WorkOrder> changeStatus(String workOrderId, String newStatus) async {
+    final res = await http.put(
+      Uri.parse('$_base/api/work-orders/$workOrderId/status'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'workOrderId': workOrderId, 'newStatus': newStatus}),
+    );
+    if (res.statusCode == 422) {
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+      throw Exception(body['message'] ?? 'Invalid transition');
+    }
+    if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
+    return WorkOrder.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+  }
 }

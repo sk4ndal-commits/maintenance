@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
 import '../services/work_order_service.dart';
+import '../widgets/status_transition_button.dart';
 import 'asset_detail_screen.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
@@ -113,21 +114,56 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
                 return Card(
                   shape: const RoundedRectangleBorder(),
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  child: ListTile(
-                    leading: _statusBadge(wo.status),
-                    title: Text(wo.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(wo.priority),
+                        Row(
+                          children: [
+                            _statusBadge(wo.status),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(wo.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.chevron_right),
+                              onPressed: () => Navigator.push(
+                                ctx,
+                                MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: wo.assetId)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _priorityBadge(wo.priority),
+                        if (wo.dueDate != null)
+                          Text(wo.dueDate!, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                         if (wo.assignedTechnicianName != null)
                           Text(wo.assignedTechnicianName!, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                        const SizedBox(height: 8),
+                        StatusTransitionButton(
+                          workOrder: wo,
+                          onTransition: (newStatus) async {
+                            try {
+                              final updated = await _service.changeStatus(
+                                wo.workOrderId,
+                                statusToApiString(newStatus),
+                              );
+                              setState(() {
+                                final idx = _allWorkOrders.indexWhere((w) => w.workOrderId == wo.workOrderId);
+                                if (idx != -1) _allWorkOrders[idx] = updated;
+                                _applyFilter();
+                              });
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+                                );
+                              }
+                            }
+                          },
+                        ),
                       ],
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => Navigator.push(
-                      ctx,
-                      MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: wo.assetId)),
                     ),
                   ),
                 );
@@ -146,6 +182,19 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
       WorkOrderStatus.inProgress => l10n.statusInProgress,
       WorkOrderStatus.done => l10n.statusDone,
     };
+  }
+
+  Widget _priorityBadge(WorkOrderPriority priority) {
+    final (bg, fg, label) = switch (priority) {
+      WorkOrderPriority.high   => (const Color(0xFFfee2e2), const Color(0xFFb91c1c), 'High'),
+      WorkOrderPriority.medium => (const Color(0xFFfef9c3), const Color(0xFFa16207), 'Medium'),
+      WorkOrderPriority.low    => (const Color(0xFFf3f4f6), const Color(0xFF6b7280), 'Low'),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      color: bg,
+      child: Text(label, style: TextStyle(color: fg, fontSize: 11, fontWeight: FontWeight.w600)),
+    );
   }
 
   Widget _statusBadge(WorkOrderStatus status) {

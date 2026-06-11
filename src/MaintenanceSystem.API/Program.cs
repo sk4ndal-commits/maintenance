@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -22,6 +23,7 @@ builder.Services.AddScoped<UpdateAssetHandler>();
 builder.Services.AddScoped<IQrCodeService, QrCodeService>();
 builder.Services.AddScoped<CreateWorkOrderHandler>();
 builder.Services.AddScoped<AssignWorkOrderHandler>();
+builder.Services.AddScoped<ChangeWorkOrderStatusHandler>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
 builder.Services.AddScoped<IAssignmentHistoryRepository, AssignmentHistoryRepository>();
 

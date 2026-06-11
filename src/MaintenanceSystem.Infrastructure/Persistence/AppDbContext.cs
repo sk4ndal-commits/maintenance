@@ -29,7 +29,7 @@ public class AppDbContext : DbContext
         {
             e.HasKey(w => w.WorkOrderId);
             e.Property(w => w.Title).IsRequired().HasMaxLength(300);
-            e.Property(w => w.Priority).IsRequired().HasMaxLength(50);
+            e.Property(w => w.Priority).IsRequired().HasMaxLength(50).HasConversion<string>();
             e.Property(w => w.Status).HasConversion<string>();
         });
 

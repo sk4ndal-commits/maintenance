@@ -24,5 +24,9 @@
   "navMyTasks": "Meine Aufgaben",
   "myTasksTitle": "Meine Aufgaben",
   "myTasksEmpty": "Keine Aufgaben vorhanden.",
-  "retry": "Erneut versuchen"
+  "retry": "Erneut versuchen",
+  "statusChangeToInProgress": "Starten",
+  "statusChangeToDone": "Abschließen",
+  "statusChangeError": "Statusänderung fehlgeschlagen: {message}",
+  "@statusChangeError": { "placeholders": { "message": { "type": "String" } } }
 }

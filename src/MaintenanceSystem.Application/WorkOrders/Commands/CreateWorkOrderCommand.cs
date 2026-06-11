@@ -1,8 +1,11 @@
+using MaintenanceSystem.Domain.Entities;
+
 namespace MaintenanceSystem.Application.WorkOrders.Commands;
 
 public record CreateWorkOrderCommand(
     Guid AssetId,
     string Title,
-    string Priority,
-    string? Description
+    WorkOrderPriority Priority,
+    string? Description,
+    DateTime? DueDate
 );

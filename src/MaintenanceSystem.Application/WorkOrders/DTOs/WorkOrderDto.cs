@@ -7,8 +7,9 @@ public record WorkOrderDto(
     Guid AssetId,
     string Title,
     WorkOrderStatus Status,
-    string Priority,
+    WorkOrderPriority Priority,
     string? Description,
+    DateTime? DueDate,
     Guid? AssignedTechnicianId,
     string? AssignedTechnicianName,
     DateTime CreatedAt,
@@ -17,7 +18,7 @@ public record WorkOrderDto(
 {
     public static WorkOrderDto From(WorkOrder w) => new(
         w.WorkOrderId, w.AssetId, w.Title, w.Status,
-        w.Priority, w.Description,
+        w.Priority, w.Description, w.DueDate,
         w.AssignedTechnicianId, w.AssignedTechnicianName,
         w.CreatedAt, w.CompletedAt);
 }

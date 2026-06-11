@@ -6,14 +6,34 @@ public class WorkOrder
     public Guid AssetId { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public WorkOrderStatus Status { get; private set; }
-    public string Priority { get; private set; } = string.Empty;
+    public WorkOrderPriority Priority { get; private set; }
     public string? Description { get; private set; }
+    public DateTime? DueDate { get; private set; }
     public Guid? AssignedTechnicianId { get; private set; }
     public string? AssignedTechnicianName { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? CompletedAt { get; private set; }
 
     private WorkOrder() { }
+
+    public void Transition(WorkOrderStatus newStatus)
+    {
+        var valid = (Status, newStatus) switch
+        {
+            (WorkOrderStatus.Assigned,   WorkOrderStatus.InProgress) => true,
+            (WorkOrderStatus.InProgress, WorkOrderStatus.Done)       => true,
+            _ => false
+        };
+
+        if (!valid)
+            throw new InvalidOperationException(
+                $"Transition from {Status} to {newStatus} is not allowed.");
+
+        if (newStatus == WorkOrderStatus.Done)
+            CompletedAt = DateTime.UtcNow;
+
+        Status = newStatus;
+    }
 
     public void Assign(Guid technicianId, string technicianName)
     {
@@ -22,7 +42,7 @@ public class WorkOrder
         Status = WorkOrderStatus.Assigned;
     }
 
-    public static WorkOrder Create(Guid assetId, string title, string priority, string? description = null) => new()
+    public static WorkOrder Create(Guid assetId, string title, WorkOrderPriority priority, string? description = null, DateTime? dueDate = null) => new()
     {
         WorkOrderId = Guid.NewGuid(),
         AssetId = assetId,
@@ -30,6 +50,7 @@ public class WorkOrder
         Status = WorkOrderStatus.Open,
         Priority = priority,
         Description = description,
+        DueDate = dueDate,
         CreatedAt = DateTime.UtcNow
     };
 }

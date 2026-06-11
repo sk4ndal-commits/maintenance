@@ -43,12 +43,13 @@ export interface WorkOrder {
   assetId: string
   title: string
   status: WorkOrderStatus
-  priority: string
+  priority: WorkOrderPriority
   description?: string
   assignedTechnicianId?: string
   assignedTechnicianName?: string
   createdAt: string
   completedAt?: string
+  dueDate?: string
 }
 
 export interface CreateWorkOrderPayload {
@@ -56,6 +57,7 @@ export interface CreateWorkOrderPayload {
   title: string
   priority: WorkOrderPriority
   description?: string
+  dueDate?: string
 }
 
 export interface WorkOrderListResponse {

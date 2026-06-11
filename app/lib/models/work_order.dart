@@ -1,5 +1,13 @@
 enum WorkOrderStatus { open, assigned, inProgress, done }
 
+enum WorkOrderPriority { low, medium, high }
+
+WorkOrderPriority workOrderPriorityFromString(String s) => switch (s) {
+  'High'   => WorkOrderPriority.high,
+  'Medium' => WorkOrderPriority.medium,
+  _        => WorkOrderPriority.low,
+};
+
 WorkOrderStatus workOrderStatusFromString(String s) {
   switch (s) {
     case 'Assigned':
@@ -19,12 +27,13 @@ class WorkOrder {
   final String assetId;
   final String title;
   final WorkOrderStatus status;
-  final String priority;
+  final WorkOrderPriority priority;
   final String? description;
   final String? assignedTechnicianId;
   final String? assignedTechnicianName;
   final String createdAt;
   final String? completedAt;
+  final String? dueDate;
 
   const WorkOrder({
     required this.workOrderId,
@@ -32,6 +41,7 @@ class WorkOrder {
     required this.title,
     required this.status,
     required this.priority,
+    this.dueDate,
     this.description,
     this.assignedTechnicianId,
     this.assignedTechnicianName,
@@ -44,7 +54,8 @@ class WorkOrder {
         assetId: j['assetId'] as String,
         title: j['title'] as String,
         status: workOrderStatusFromString(j['status'] as String),
-        priority: j['priority'] as String,
+        priority: workOrderPriorityFromString(j['priority'] as String),
+        dueDate: j['dueDate'] as String?,
         description: j['description'] as String?,
         assignedTechnicianId: j['assignedTechnicianId'] as String?,
         assignedTechnicianName: j['assignedTechnicianName'] as String?,

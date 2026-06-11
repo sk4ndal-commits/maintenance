@@ -11,17 +11,20 @@ public class WorkOrdersController : ControllerBase
 {
     private readonly CreateWorkOrderHandler _createHandler;
     private readonly AssignWorkOrderHandler _assignHandler;
+    private readonly ChangeWorkOrderStatusHandler _statusHandler;
     private readonly IWorkOrderRepository _repo;
     private readonly IAssignmentHistoryRepository _historyRepo;
 
     public WorkOrdersController(
         CreateWorkOrderHandler createHandler,
         AssignWorkOrderHandler assignHandler,
+        ChangeWorkOrderStatusHandler statusHandler,
         IWorkOrderRepository repo,
         IAssignmentHistoryRepository historyRepo)
     {
         _createHandler = createHandler;
         _assignHandler = assignHandler;
+        _statusHandler = statusHandler;
         _repo = repo;
         _historyRepo = historyRepo;
     }
@@ -70,6 +73,25 @@ public class WorkOrdersController : ControllerBase
         catch (KeyNotFoundException ex)
         {
             return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id:guid}/status")]
+    public async Task<IActionResult> ChangeStatus(Guid id, [FromBody] ChangeWorkOrderStatusCommand cmd)
+    {
+        if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
+        try
+        {
+            var dto = await _statusHandler.Handle(cmd);
+            return Ok(dto);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
         }
     }
 
