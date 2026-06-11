@@ -10,11 +10,13 @@ namespace MaintenanceSystem.API.Controllers;
 public class AssetsController : ControllerBase
 {
     private readonly CreateAssetHandler _createHandler;
+    private readonly UpdateAssetHandler _updateHandler;
     private readonly IAssetRepository _repo;
 
-    public AssetsController(CreateAssetHandler createHandler, IAssetRepository repo)
+    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo)
     {
         _createHandler = createHandler;
+        _updateHandler = updateHandler;
         _repo = repo;
     }
 
@@ -44,6 +46,15 @@ public class AssetsController : ControllerBase
             page,
             pageSize
         });
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAssetCommand cmd)
+    {
+        if (id != cmd.AssetId) return BadRequest("ID mismatch");
+        var dto = await _updateHandler.Handle(cmd);
+        if (dto is null) return NotFound();
+        return Ok(dto);
     }
 
     [HttpDelete("{id:guid}")]

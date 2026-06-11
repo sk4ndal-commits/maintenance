@@ -4,6 +4,7 @@ import type { Asset } from '../../types/asset'
 
 const { t, locale } = useI18n()
 defineProps<{ asset: Asset }>()
+const emit = defineEmits<{ (e: 'edit', asset: Asset): void }>()
 </script>
 
 <template>
@@ -16,6 +17,11 @@ defineProps<{ asset: Asset }>()
     <p class="asset-card__location">📍 {{ asset.location }}</p>
     <p v-if="asset.description" class="asset-card__description">{{ asset.description }}</p>
     <code class="asset-card__qr">{{ t('card.qrCode') }}: {{ asset.qrCodePayload }}</code>
+    <div class="asset-card__footer">
+      <button class="btn btn--secondary asset-card__edit" @click.stop="emit('edit', asset)">
+        {{ t('card.edit') }}
+      </button>
+    </div>
   </div>
 </template>
 

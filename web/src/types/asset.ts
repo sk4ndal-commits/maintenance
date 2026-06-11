@@ -8,6 +8,14 @@ export interface Asset {
   createdAt: string
 }
 
+export interface UpdateAssetPayload {
+  assetId: string
+  name: string
+  type: string
+  location: string
+  description?: string
+}
+
 export interface CreateAssetPayload {
   name: string
   type: string

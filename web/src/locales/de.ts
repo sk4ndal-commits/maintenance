@@ -36,11 +36,14 @@ export default {
     submit: 'Asset erstellen',
     submitting: 'Wird erstellt…',
     errorUnknown: 'Unbekannter Fehler',
+    editTitle: 'Asset bearbeiten',
+    save: 'Speichern',
   },
   card: {
     type: 'Typ',
     location: 'Standort',
     created: 'Erstellt',
     qrCode: 'QR',
+    edit: 'Bearbeiten',
   },
 }

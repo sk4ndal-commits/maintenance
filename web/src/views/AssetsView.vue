@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { assetApi } from '../api/assetApi'
 import type { Asset } from '../types/asset'
 import AssetCreateForm from '../components/assets/AssetCreateForm.vue'
+import AssetEditForm from '../components/assets/AssetEditForm.vue'
 import AssetCard from '../components/assets/AssetCard.vue'
 
 const { t } = useI18n()
@@ -16,6 +17,7 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 const createdAsset = ref<Asset | null>(null)
 const showForm = ref(false)
+const editingAsset = ref<Asset | null>(null)
 
 async function loadAssets() {
   loading.value = true
@@ -34,6 +36,18 @@ async function loadAssets() {
 function onCreated(asset: Asset) {
   createdAsset.value = asset
   showForm.value = false
+  loadAssets()
+}
+
+function onEdit(asset: Asset) {
+  editingAsset.value = asset
+  showForm.value = false
+  createdAsset.value = null
+}
+
+function onUpdated(asset: Asset) {
+  editingAsset.value = null
+  createdAsset.value = asset
   loadAssets()
 }
 
@@ -65,6 +79,10 @@ onMounted(loadAssets)
       <AssetCreateForm @created="onCreated" />
     </div>
 
+    <div v-if="editingAsset" class="assets-view__form-panel">
+      <AssetEditForm :asset="editingAsset" @updated="onUpdated" @cancel="editingAsset = null" />
+    </div>
+
     <div v-if="error" class="alert alert--danger">{{ error }}</div>
 
     <div v-if="loading" class="assets-view__loading">{{ t('assets.loading') }}</div>
@@ -74,6 +92,7 @@ onMounted(loadAssets)
         v-for="asset in assets"
         :key="asset.assetId"
         :asset="asset"
+        @edit="onEdit"
       />
       <p v-if="assets.length === 0" class="assets-view__empty">{{ t('assets.empty') }}</p>
     </div>

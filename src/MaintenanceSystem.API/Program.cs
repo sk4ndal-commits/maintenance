@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<CreateAssetHandler>();
+builder.Services.AddScoped<UpdateAssetHandler>();
 
 builder.Services.AddCors(options =>
 {
