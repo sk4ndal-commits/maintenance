@@ -260,6 +260,30 @@ abstract class AppLocalizations {
   /// **'Abschließen'**
   String get statusChangeToDone;
 
+  /// No description provided for @checklistTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Checkliste'**
+  String get checklistTitle;
+
+  /// No description provided for @checklistMandatory.
+  ///
+  /// In de, this message translates to:
+  /// **'Pflicht'**
+  String get checklistMandatory;
+
+  /// No description provided for @checklistEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Checklistenpunkte.'**
+  String get checklistEmpty;
+
+  /// No description provided for @checklistBlockedHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Pflichtschritte müssen abgehakt sein.'**
+  String get checklistBlockedHint;
+
   /// No description provided for @statusChangeError.
   ///
   /// In de, this message translates to:

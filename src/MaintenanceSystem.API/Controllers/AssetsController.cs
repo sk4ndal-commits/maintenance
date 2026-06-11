@@ -69,7 +69,7 @@ public class AssetsController : ControllerBase
         var asset = await _repo.GetByIdAsync(id);
         if (asset is null) return NotFound();
         var orders = await _workOrderRepo.GetByAssetIdAsync(id, limit);
-        return Ok(orders.Select(WorkOrderDto.From));
+        return Ok(orders.Select(w => WorkOrderDto.From(w)));
     }
 
     [HttpGet("{id:guid}/qr-code")]

@@ -12,21 +12,30 @@ public class WorkOrdersController : ControllerBase
     private readonly CreateWorkOrderHandler _createHandler;
     private readonly AssignWorkOrderHandler _assignHandler;
     private readonly ChangeWorkOrderStatusHandler _statusHandler;
+    private readonly AddChecklistStepHandler _addStepHandler;
+    private readonly CompleteChecklistStepHandler _completeStepHandler;
     private readonly IWorkOrderRepository _repo;
     private readonly IAssignmentHistoryRepository _historyRepo;
+    private readonly IChecklistStepRepository _stepsRepo;
 
     public WorkOrdersController(
         CreateWorkOrderHandler createHandler,
         AssignWorkOrderHandler assignHandler,
         ChangeWorkOrderStatusHandler statusHandler,
+        AddChecklistStepHandler addStepHandler,
+        CompleteChecklistStepHandler completeStepHandler,
         IWorkOrderRepository repo,
-        IAssignmentHistoryRepository historyRepo)
+        IAssignmentHistoryRepository historyRepo,
+        IChecklistStepRepository stepsRepo)
     {
         _createHandler = createHandler;
         _assignHandler = assignHandler;
         _statusHandler = statusHandler;
+        _addStepHandler = addStepHandler;
+        _completeStepHandler = completeStepHandler;
         _repo = repo;
         _historyRepo = historyRepo;
+        _stepsRepo = stepsRepo;
     }
 
     [HttpPost]
@@ -58,7 +67,7 @@ public class WorkOrdersController : ControllerBase
         [FromQuery] Guid? technicianId = null)
     {
         var (items, total) = await _repo.GetAllAsync(page, pageSize, technicianId);
-        return Ok(new { data = items.Select(WorkOrderDto.From), total, page, pageSize });
+        return Ok(new { data = items.Select(w => WorkOrderDto.From(w)), total, page, pageSize });
     }
 
     [HttpPut("{id:guid}/assign")]
@@ -100,5 +109,37 @@ public class WorkOrdersController : ControllerBase
     {
         var history = await _historyRepo.GetByWorkOrderIdAsync(id);
         return Ok(history);
+    }
+
+    [HttpGet("{id:guid}/checklist")]
+    public async Task<IActionResult> GetChecklist(Guid id)
+    {
+        var steps = await _stepsRepo.GetByWorkOrderIdAsync(id);
+        return Ok(steps.Select(ChecklistStepDto.From));
+    }
+
+    [HttpPost("{id:guid}/checklist")]
+    public async Task<IActionResult> AddStep(Guid id, [FromBody] AddChecklistStepCommand cmd)
+    {
+        if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
+        try
+        {
+            var dto = await _addStepHandler.Handle(cmd);
+            return CreatedAtAction(nameof(GetChecklist), new { id }, dto);
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+    }
+
+    [HttpPut("{id:guid}/checklist/{stepId:guid}")]
+    public async Task<IActionResult> ToggleStep(Guid id, Guid stepId, [FromBody] CompleteChecklistStepCommand cmd)
+    {
+        if (id != cmd.WorkOrderId || stepId != cmd.StepId) return BadRequest(new { message = "ID mismatch" });
+        try
+        {
+            var dto = await _completeStepHandler.Handle(cmd);
+            return Ok(dto);
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+        catch (InvalidOperationException ex) { return UnprocessableEntity(new { message = ex.Message }); }
     }
 }

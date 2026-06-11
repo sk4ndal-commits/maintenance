@@ -13,12 +13,14 @@ public record WorkOrderDto(
     Guid? AssignedTechnicianId,
     string? AssignedTechnicianName,
     DateTime CreatedAt,
-    DateTime? CompletedAt
+    DateTime? CompletedAt,
+    IEnumerable<ChecklistStepDto> ChecklistSteps
 )
 {
-    public static WorkOrderDto From(WorkOrder w) => new(
+    public static WorkOrderDto From(WorkOrder w, IEnumerable<ChecklistStep>? steps = null) => new(
         w.WorkOrderId, w.AssetId, w.Title, w.Status,
         w.Priority, w.Description, w.DueDate,
         w.AssignedTechnicianId, w.AssignedTechnicianName,
-        w.CreatedAt, w.CompletedAt);
+        w.CreatedAt, w.CompletedAt,
+        (steps ?? []).Select(ChecklistStepDto.From));
 }

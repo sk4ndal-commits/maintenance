@@ -16,7 +16,7 @@ public class WorkOrder
 
     private WorkOrder() { }
 
-    public void Transition(WorkOrderStatus newStatus)
+    public void Transition(WorkOrderStatus newStatus, IEnumerable<ChecklistStep>? steps = null)
     {
         var valid = (Status, newStatus) switch
         {
@@ -30,7 +30,15 @@ public class WorkOrder
                 $"Transition from {Status} to {newStatus} is not allowed.");
 
         if (newStatus == WorkOrderStatus.Done)
+        {
+            var mandatorySteps = steps ?? [];
+            var incomplete = mandatorySteps.Where(s => s.IsMandatory && !s.IsCompleted).ToList();
+            if (incomplete.Count != 0)
+                throw new InvalidOperationException(
+                    $"Cannot complete: {incomplete.Count} mandatory checklist step(s) not done.");
+
             CompletedAt = DateTime.UtcNow;
+        }
 
         Status = newStatus;
     }

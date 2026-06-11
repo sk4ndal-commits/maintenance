@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
     public DbSet<Technician> Technicians => Set<Technician>();
     public DbSet<AssignmentHistory> AssignmentHistories => Set<AssignmentHistory>();
+    public DbSet<ChecklistStep> ChecklistSteps => Set<ChecklistStep>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,6 +53,12 @@ public class AppDbContext : DbContext
             e.HasKey(h => h.Id);
             e.Property(h => h.AssignedBy).IsRequired().HasMaxLength(200);
             e.Property(h => h.TechnicianName).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<ChecklistStep>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Label).IsRequired().HasMaxLength(500);
         });
     }
 }

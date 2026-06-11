@@ -26,6 +26,9 @@ builder.Services.AddScoped<AssignWorkOrderHandler>();
 builder.Services.AddScoped<ChangeWorkOrderStatusHandler>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
 builder.Services.AddScoped<IAssignmentHistoryRepository, AssignmentHistoryRepository>();
+builder.Services.AddScoped<IChecklistStepRepository, ChecklistStepRepository>();
+builder.Services.AddScoped<AddChecklistStepHandler>();
+builder.Services.AddScoped<CompleteChecklistStepHandler>();
 
 builder.Services.AddCors(options =>
 {

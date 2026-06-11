@@ -90,6 +90,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusChangeToDone => 'Complete';
 
   @override
+  String get checklistTitle => 'Checklist';
+
+  @override
+  String get checklistMandatory => 'Required';
+
+  @override
+  String get checklistEmpty => 'No checklist steps.';
+
+  @override
+  String get checklistBlockedHint =>
+      'Complete all required steps before finishing.';
+
+  @override
   String statusChangeError(String message) {
     return 'Status change failed: $message';
   }

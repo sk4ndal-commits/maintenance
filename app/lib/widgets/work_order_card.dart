@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
+import 'checklist_widget.dart';
 import 'status_transition_button.dart';
 import 'work_order_priority_badge.dart';
 
-class WorkOrderCard extends StatelessWidget {
+class WorkOrderCard extends StatefulWidget {
   final WorkOrder workOrder;
   final Future<void> Function(WorkOrderStatus)? onTransition;
   final VoidCallback? onAssetTap;
@@ -17,9 +18,16 @@ class WorkOrderCard extends StatelessWidget {
   });
 
   @override
+  State<WorkOrderCard> createState() => _WorkOrderCardState();
+}
+
+class _WorkOrderCardState extends State<WorkOrderCard> {
+  bool _mandatoryComplete = true;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final wo = workOrder;
+    final wo = widget.workOrder;
 
     final (statusBg, statusFg, statusLabel) = switch (wo.status) {
       WorkOrderStatus.done       => (const Color(0xFFdcfce7), const Color(0xFF15803d), l10n.statusDone),
@@ -50,10 +58,10 @@ class WorkOrderCard extends StatelessWidget {
                 Expanded(
                   child: Text(wo.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                if (onAssetTap != null)
+                if (widget.onAssetTap != null)
                   IconButton(
                     icon: const Icon(Icons.chevron_right),
-                    onPressed: onAssetTap,
+                    onPressed: widget.onAssetTap,
                   ),
               ],
             ),
@@ -73,9 +81,18 @@ class WorkOrderCard extends StatelessWidget {
                 child: Text(wo.assignedTechnicianName!,
                     style: const TextStyle(fontSize: 12, color: Colors.grey)),
               ),
-            if (onTransition != null) ...[
+            if (widget.onTransition != null) ...[
               const SizedBox(height: 8),
-              StatusTransitionButton(workOrder: wo, onTransition: onTransition!),
+              ChecklistWidget(
+                workOrderId: wo.workOrderId,
+                onMandatoryComplete: (done) => setState(() => _mandatoryComplete = done),
+              ),
+              const SizedBox(height: 8),
+              StatusTransitionButton(
+                workOrder: wo,
+                onTransition: widget.onTransition!,
+                canComplete: _mandatoryComplete,
+              ),
             ],
           ],
         ),
