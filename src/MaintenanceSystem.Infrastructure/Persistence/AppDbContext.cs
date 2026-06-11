@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Technician> Technicians => Set<Technician>();
     public DbSet<AssignmentHistory> AssignmentHistories => Set<AssignmentHistory>();
     public DbSet<ChecklistStep> ChecklistSteps => Set<ChecklistStep>();
+    public DbSet<MaintenanceDocument> MaintenanceDocuments => Set<MaintenanceDocument>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,6 +60,16 @@ public class AppDbContext : DbContext
         {
             e.HasKey(s => s.Id);
             e.Property(s => s.Label).IsRequired().HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<MaintenanceDocument>(e =>
+        {
+            e.HasKey(d => d.Id);
+            e.Property(d => d.FileName).IsRequired().HasMaxLength(500);
+            e.Property(d => d.StoragePath).IsRequired().HasMaxLength(1000);
+            e.Property(d => d.ContentType).IsRequired().HasMaxLength(200);
+            e.Property(d => d.UploadedBy).IsRequired().HasMaxLength(200);
+            e.Property(d => d.Notes).HasMaxLength(2000);
         });
     }
 }

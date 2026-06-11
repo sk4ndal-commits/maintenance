@@ -115,4 +115,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get priorityHigh => 'High';
+
+  @override
+  String get documentsTitle => 'Documents & Photos';
+
+  @override
+  String get documentsNotes => 'Notes';
+
+  @override
+  String get documentsCamera => 'Take Photo';
+
+  @override
+  String get documentsGallery => 'From Gallery';
+
+  @override
+  String get documentsEmpty => 'No documents uploaded.';
 }

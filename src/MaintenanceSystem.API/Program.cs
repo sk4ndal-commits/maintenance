@@ -3,6 +3,7 @@ using MaintenanceSystem.Application.WorkOrders.Commands;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Infrastructure.Persistence;
 using MaintenanceSystem.Infrastructure.Services;
+using MaintenanceSystem.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,9 @@ builder.Services.AddScoped<IAssignmentHistoryRepository, AssignmentHistoryReposi
 builder.Services.AddScoped<IChecklistStepRepository, ChecklistStepRepository>();
 builder.Services.AddScoped<AddChecklistStepHandler>();
 builder.Services.AddScoped<CompleteChecklistStepHandler>();
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+builder.Services.AddScoped<IMaintenanceDocumentRepository, MaintenanceDocumentRepository>();
+builder.Services.AddScoped<UploadMaintenanceDocumentHandler>();
 
 builder.Services.AddCors(options =>
 {

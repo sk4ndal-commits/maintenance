@@ -35,5 +35,10 @@
   "@statusChangeError": { "placeholders": { "message": { "type": "String" } } },
   "priorityLow": "Low",
   "priorityMedium": "Medium",
-  "priorityHigh": "High"
+  "priorityHigh": "High",
+  "documentsTitle": "Documents & Photos",
+  "documentsNotes": "Notes",
+  "documentsCamera": "Take Photo",
+  "documentsGallery": "From Gallery",
+  "documentsEmpty": "No documents uploaded."
 }

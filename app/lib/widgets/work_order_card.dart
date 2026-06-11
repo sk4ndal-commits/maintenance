@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
 import 'checklist_widget.dart';
+import 'maintenance_document_widget.dart';
 import 'status_transition_button.dart';
 import 'work_order_priority_badge.dart';
 
@@ -87,6 +88,8 @@ class _WorkOrderCardState extends State<WorkOrderCard> {
                 workOrderId: wo.workOrderId,
                 onMandatoryComplete: (done) => setState(() => _mandatoryComplete = done),
               ),
+              const SizedBox(height: 8),
+              MaintenanceDocumentWidget(workOrderId: wo.workOrderId),
               const SizedBox(height: 8),
               StatusTransitionButton(
                 workOrder: wo,

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/checklist_step.dart';
+import '../models/maintenance_document.dart';
 import '../models/work_order.dart';
 
 class WorkOrderService {
@@ -50,5 +52,28 @@ class WorkOrderService {
     );
     if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
     return ChecklistStep.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+  }
+
+  Future<List<MaintenanceDocument>> getDocuments(String workOrderId) async {
+    final res = await http.get(Uri.parse('$_base/api/work-orders/$workOrderId/documents'));
+    if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
+    final list = jsonDecode(res.body) as List;
+    return list.map((e) => MaintenanceDocument.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<MaintenanceDocument> uploadDocument(
+      String workOrderId, File file, String? notes) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$_base/api/work-orders/$workOrderId/documents'),
+    );
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+    if (notes != null && notes.isNotEmpty) request.fields['notes'] = notes;
+    request.fields['uploadedBy'] = 'app-technician';
+
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode != 201) throw Exception('Upload failed: ${res.statusCode}');
+    return MaintenanceDocument.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
   }
 }

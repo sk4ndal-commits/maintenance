@@ -14,9 +14,12 @@ public class WorkOrdersController : ControllerBase
     private readonly ChangeWorkOrderStatusHandler _statusHandler;
     private readonly AddChecklistStepHandler _addStepHandler;
     private readonly CompleteChecklistStepHandler _completeStepHandler;
+    private readonly UploadMaintenanceDocumentHandler _uploadDocHandler;
     private readonly IWorkOrderRepository _repo;
     private readonly IAssignmentHistoryRepository _historyRepo;
     private readonly IChecklistStepRepository _stepsRepo;
+    private readonly IMaintenanceDocumentRepository _docRepo;
+    private readonly IFileStorageService _storage;
 
     public WorkOrdersController(
         CreateWorkOrderHandler createHandler,
@@ -24,18 +27,24 @@ public class WorkOrdersController : ControllerBase
         ChangeWorkOrderStatusHandler statusHandler,
         AddChecklistStepHandler addStepHandler,
         CompleteChecklistStepHandler completeStepHandler,
+        UploadMaintenanceDocumentHandler uploadDocHandler,
         IWorkOrderRepository repo,
         IAssignmentHistoryRepository historyRepo,
-        IChecklistStepRepository stepsRepo)
+        IChecklistStepRepository stepsRepo,
+        IMaintenanceDocumentRepository docRepo,
+        IFileStorageService storage)
     {
         _createHandler = createHandler;
         _assignHandler = assignHandler;
         _statusHandler = statusHandler;
         _addStepHandler = addStepHandler;
         _completeStepHandler = completeStepHandler;
+        _uploadDocHandler = uploadDocHandler;
         _repo = repo;
         _historyRepo = historyRepo;
         _stepsRepo = stepsRepo;
+        _docRepo = docRepo;
+        _storage = storage;
     }
 
     [HttpPost]
@@ -128,6 +137,44 @@ public class WorkOrdersController : ControllerBase
             return CreatedAtAction(nameof(GetChecklist), new { id }, dto);
         }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+    }
+
+    [HttpPost("{id:guid}/documents")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UploadDocument(
+        Guid id,
+        IFormFile file,
+        [FromForm] string? notes = null,
+        [FromForm] string uploadedBy = "system")
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest(new { message = "No file provided" });
+
+        var cmd = new UploadMaintenanceDocumentCommand(
+            id, file.FileName, file.ContentType,
+            file.OpenReadStream(), file.Length, notes, uploadedBy);
+        try
+        {
+            var dto = await _uploadDocHandler.Handle(cmd);
+            return CreatedAtAction(nameof(GetDocuments), new { id }, dto);
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+    }
+
+    [HttpGet("{id:guid}/documents")]
+    public async Task<IActionResult> GetDocuments(Guid id)
+    {
+        var docs = await _docRepo.GetByWorkOrderIdAsync(id);
+        return Ok(docs.Select(d => MaintenanceDocumentDto.From(d)));
+    }
+
+    [HttpGet("{id:guid}/documents/{docId:guid}/download")]
+    public async Task<IActionResult> DownloadDocument(Guid id, Guid docId)
+    {
+        var doc = await _docRepo.GetByIdAsync(docId);
+        if (doc == null || doc.WorkOrderId != id) return NotFound();
+        var stream = await _storage.RetrieveAsync(doc.StoragePath);
+        return File(stream, doc.ContentType, doc.FileName);
     }
 
     [HttpPut("{id:guid}/checklist/{stepId:guid}")]

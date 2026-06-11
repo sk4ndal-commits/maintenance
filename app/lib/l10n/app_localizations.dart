@@ -307,6 +307,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Hoch'**
   String get priorityHigh;
+
+  /// No description provided for @documentsTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Dokumente & Fotos'**
+  String get documentsTitle;
+
+  /// No description provided for @documentsNotes.
+  ///
+  /// In de, this message translates to:
+  /// **'Notizen'**
+  String get documentsNotes;
+
+  /// No description provided for @documentsCamera.
+  ///
+  /// In de, this message translates to:
+  /// **'Foto aufnehmen'**
+  String get documentsCamera;
+
+  /// No description provided for @documentsGallery.
+  ///
+  /// In de, this message translates to:
+  /// **'Aus Galerie'**
+  String get documentsGallery;
+
+  /// No description provided for @documentsEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Dokumente hochgeladen.'**
+  String get documentsEmpty;
 }
 
 class _AppLocalizationsDelegate
