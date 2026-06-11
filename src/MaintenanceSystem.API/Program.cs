@@ -1,4 +1,5 @@
 using MaintenanceSystem.Application.Assets.Commands;
+using MaintenanceSystem.Application.Assets.Queries;
 using MaintenanceSystem.Application.WorkOrders.Commands;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Infrastructure.Persistence;
@@ -34,6 +35,8 @@ builder.Services.AddScoped<CompleteWorkOrderHandler>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddScoped<IMaintenanceDocumentRepository, MaintenanceDocumentRepository>();
 builder.Services.AddScoped<UploadMaintenanceDocumentHandler>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<GetAssetHistoryHandler>();
 
 builder.Services.AddCors(options =>
 {

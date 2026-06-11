@@ -1,5 +1,6 @@
 using MaintenanceSystem.Application.Assets.Commands;
 using MaintenanceSystem.Application.Assets.DTOs;
+using MaintenanceSystem.Application.Assets.Queries;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Application.WorkOrders.DTOs;
 using MaintenanceSystem.Infrastructure.Services;
@@ -16,14 +17,16 @@ public class AssetsController : ControllerBase
     private readonly IAssetRepository _repo;
     private readonly IWorkOrderRepository _workOrderRepo;
     private readonly IQrCodeService _qrCodeService;
+    private readonly GetAssetHistoryHandler _historyHandler;
 
-    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo, IWorkOrderRepository workOrderRepo, IQrCodeService qrCodeService)
+    public AssetsController(CreateAssetHandler createHandler, UpdateAssetHandler updateHandler, IAssetRepository repo, IWorkOrderRepository workOrderRepo, IQrCodeService qrCodeService, GetAssetHistoryHandler historyHandler)
     {
         _createHandler = createHandler;
         _updateHandler = updateHandler;
         _repo = repo;
         _workOrderRepo = workOrderRepo;
         _qrCodeService = qrCodeService;
+        _historyHandler = historyHandler;
     }
 
     [HttpPost]
@@ -79,6 +82,21 @@ public class AssetsController : ControllerBase
         if (asset is null) return NotFound();
         var png = _qrCodeService.GeneratePng(asset.QrCodePayload);
         return File(png, "image/png", $"asset-{id}.png");
+    }
+
+    [HttpGet("{id:guid}/history")]
+    public async Task<IActionResult> GetHistory(
+        Guid id,
+        [FromQuery] string? eventType = null,
+        [FromQuery] string? search = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50)
+    {
+        var asset = await _repo.GetByIdAsync(id);
+        if (asset is null) return NotFound();
+        var (events, total) = await _historyHandler.Handle(
+            new GetAssetHistoryQuery(id, eventType, search, page, pageSize));
+        return Ok(new { data = events, total, page, pageSize });
     }
 
     [HttpDelete("{id:guid}")]

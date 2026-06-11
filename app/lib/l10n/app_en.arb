@@ -58,5 +58,14 @@
       "total": { "type": "int" }
     }
   },
-  "completedAt": "Completed at"
+  "completedAt": "Completed at",
+  "historyTitle": "Maintenance History",
+  "historySearch": "Search history…",
+  "historyAllTypes": "All",
+  "historyEmpty": "No history entries found.",
+  "historyTypeCreated": "Created",
+  "historyTypeCompleted": "Completed",
+  "historyTypeAssigned": "Assigned",
+  "historyTypeChecklist": "Checklist",
+  "historyTypeDocument": "Document"
 }

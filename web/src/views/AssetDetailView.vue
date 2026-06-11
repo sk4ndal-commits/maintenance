@@ -9,6 +9,7 @@ import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vu
 import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vue'
 import WorkOrderChecklistForm from '../components/workorders/WorkOrderChecklistForm.vue'
 import AssetEditForm from '../components/assets/AssetEditForm.vue'
+import AssetHistoryTimeline from '../components/assets/AssetHistoryTimeline.vue'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -158,6 +159,12 @@ function statusClass(status: WorkOrderStatus): string {
                 <WorkOrderChecklistForm :work-order-id="wo.workOrderId" />
               </div>
             </div>
+          </section>
+
+          <!-- History section -->
+          <section class="asset-detail__history-section">
+            <h2 class="asset-detail__section-title">{{ t('history.title') }}</h2>
+            <AssetHistoryTimeline :asset-id="asset.assetId" />
           </section>
         </div>
 

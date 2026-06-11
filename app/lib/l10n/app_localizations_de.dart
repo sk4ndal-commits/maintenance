@@ -170,4 +170,31 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get completedAt => 'Abgeschlossen am';
+
+  @override
+  String get historyTitle => 'Wartungshistorie';
+
+  @override
+  String get historySearch => 'Historie durchsuchen…';
+
+  @override
+  String get historyAllTypes => 'Alle';
+
+  @override
+  String get historyEmpty => 'Keine Historieneinträge gefunden.';
+
+  @override
+  String get historyTypeCreated => 'Erstellt';
+
+  @override
+  String get historyTypeCompleted => 'Abgeschlossen';
+
+  @override
+  String get historyTypeAssigned => 'Zugewiesen';
+
+  @override
+  String get historyTypeChecklist => 'Checkliste';
+
+  @override
+  String get historyTypeDocument => 'Dokument';
 }

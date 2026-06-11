@@ -86,6 +86,22 @@ export default {
     checklistStep: 'Step description',
     checklistRequiresPhoto: 'Requires photo',
   },
+  history: {
+    title: 'Maintenance History',
+    search: 'Search history\u2026',
+    allTypes: 'All event types',
+    loading: 'Loading\u2026',
+    empty: 'No history entries found.',
+    total: '{count} events total',
+    type: {
+      WorkOrderCreated: 'Work Order Created',
+      WorkOrderAssigned: 'Assigned',
+      WorkOrderCompleted: 'Completed',
+      ChecklistStepCompleted: 'Checklist Step',
+      DocumentUploaded: 'Document Uploaded',
+      StatusChanged: 'Status Changed',
+    },
+  },
   card: {
     type: 'Type',
     location: 'Location',

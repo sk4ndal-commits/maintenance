@@ -4,6 +4,7 @@ import '../models/asset.dart';
 import '../models/work_order.dart';
 import '../services/asset_service.dart';
 import '../services/work_order_service.dart';
+import '../screens/asset_history_screen.dart';
 import '../widgets/work_order_card.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
@@ -107,6 +108,22 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         backgroundColor: _primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.history, color: Colors.white, size: 18),
+            label: Text(l10n.historyTitle,
+                style: const TextStyle(color: Colors.white, fontSize: 13)),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AssetHistoryScreen(
+                  assetId: asset.assetId,
+                  assetName: asset.name,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: ListView(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/asset.dart';
+import '../models/history_event.dart';
 import '../models/work_order.dart';
 
 class AssetService {
@@ -25,6 +26,21 @@ class AssetService {
       throw Exception('Failed to load asset: ${res.statusCode}');
     }
     return Asset.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+  }
+
+  Future<List<HistoryEvent>> getHistory(String assetId,
+      {String? search, String? eventType}) async {
+    final params = <String, String>{'page': '1', 'pageSize': '100'};
+    if (search != null && search.isNotEmpty) params['search'] = search;
+    if (eventType != null && eventType.isNotEmpty) params['eventType'] = eventType;
+    final uri = Uri.parse('$_base/api/assets/$assetId/history')
+        .replace(queryParameters: params);
+    final res = await http.get(uri);
+    if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+    return (body['data'] as List)
+        .map((e) => HistoryEvent.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<WorkOrder>> getWorkOrders(String id, {int limit = 10}) async {

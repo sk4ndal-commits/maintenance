@@ -79,6 +79,24 @@ export default {
     checklistEmpty: 'Keine Checklistenpunkte.',
     checklistStep: 'Schrittbeschreibung',
     checklistRequiresPhoto: 'Foto erforderlich',
+  },
+  history: {
+    title: 'Wartungshistorie',
+    search: 'Historie durchsuchen\u2026',
+    allTypes: 'Alle Ereignistypen',
+    loading: 'Wird geladen\u2026',
+    empty: 'Keine Historieneintr\u00e4ge gefunden.',
+    total: '{count} Ereignisse gesamt',
+    type: {
+      WorkOrderCreated: 'Wartungsauftrag erstellt',
+      WorkOrderAssigned: 'Zugewiesen',
+      WorkOrderCompleted: 'Abgeschlossen',
+      ChecklistStepCompleted: 'Checklistenpunkt',
+      DocumentUploaded: 'Dokument hochgeladen',
+      StatusChanged: 'Status ge\u00e4ndert',
+    },
+  },
+  wo: {
     status: {
       Open: 'Offen',
       Assigned: 'Zugewiesen',

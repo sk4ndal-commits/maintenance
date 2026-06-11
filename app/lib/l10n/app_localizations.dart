@@ -409,6 +409,60 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Abgeschlossen am'**
   String get completedAt;
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Wartungshistorie'**
+  String get historyTitle;
+
+  /// No description provided for @historySearch.
+  ///
+  /// In de, this message translates to:
+  /// **'Historie durchsuchen…'**
+  String get historySearch;
+
+  /// No description provided for @historyAllTypes.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle'**
+  String get historyAllTypes;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Historieneinträge gefunden.'**
+  String get historyEmpty;
+
+  /// No description provided for @historyTypeCreated.
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt'**
+  String get historyTypeCreated;
+
+  /// No description provided for @historyTypeCompleted.
+  ///
+  /// In de, this message translates to:
+  /// **'Abgeschlossen'**
+  String get historyTypeCompleted;
+
+  /// No description provided for @historyTypeAssigned.
+  ///
+  /// In de, this message translates to:
+  /// **'Zugewiesen'**
+  String get historyTypeAssigned;
+
+  /// No description provided for @historyTypeChecklist.
+  ///
+  /// In de, this message translates to:
+  /// **'Checkliste'**
+  String get historyTypeChecklist;
+
+  /// No description provided for @historyTypeDocument.
+  ///
+  /// In de, this message translates to:
+  /// **'Dokument'**
+  String get historyTypeDocument;
 }
 
 class _AppLocalizationsDelegate

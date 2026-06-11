@@ -168,4 +168,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completedAt => 'Completed at';
+
+  @override
+  String get historyTitle => 'Maintenance History';
+
+  @override
+  String get historySearch => 'Search history…';
+
+  @override
+  String get historyAllTypes => 'All';
+
+  @override
+  String get historyEmpty => 'No history entries found.';
+
+  @override
+  String get historyTypeCreated => 'Created';
+
+  @override
+  String get historyTypeCompleted => 'Completed';
+
+  @override
+  String get historyTypeAssigned => 'Assigned';
+
+  @override
+  String get historyTypeChecklist => 'Checklist';
+
+  @override
+  String get historyTypeDocument => 'Document';
 }
