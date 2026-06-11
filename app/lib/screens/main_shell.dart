@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'asset_list_screen.dart';
+import 'my_tasks_screen.dart';
 import 'qr_scan_screen.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
@@ -18,6 +19,7 @@ class _MainShellState extends State<MainShell> {
   static const _screens = <Widget>[
     AssetListScreen(),
     QrScanScreen(),
+    MyTasksScreen(),
   ];
 
   @override
@@ -45,6 +47,11 @@ class _MainShellState extends State<MainShell> {
             icon: const Icon(Icons.qr_code_scanner_outlined),
             activeIcon: const Icon(Icons.qr_code_scanner),
             label: l10n.navScan,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.assignment_outlined),
+            activeIcon: const Icon(Icons.assignment),
+            label: l10n.navMyTasks,
           ),
         ],
       ),

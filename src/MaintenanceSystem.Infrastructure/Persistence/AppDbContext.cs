@@ -10,6 +10,8 @@ public class AppDbContext : DbContext
     public DbSet<Asset> Assets => Set<Asset>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
+    public DbSet<Technician> Technicians => Set<Technician>();
+    public DbSet<AssignmentHistory> AssignmentHistories => Set<AssignmentHistory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +38,20 @@ public class AppDbContext : DbContext
             e.HasKey(a => a.Id);
             e.Property(a => a.Action).IsRequired().HasMaxLength(200);
             e.Property(a => a.Details).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<Technician>(e =>
+        {
+            e.HasKey(t => t.TechnicianId);
+            e.Property(t => t.Name).IsRequired().HasMaxLength(200);
+            e.Property(t => t.Email).IsRequired().HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<AssignmentHistory>(e =>
+        {
+            e.HasKey(h => h.Id);
+            e.Property(h => h.AssignedBy).IsRequired().HasMaxLength(200);
+            e.Property(h => h.TechnicianName).HasMaxLength(200);
         });
     }
 }

@@ -72,4 +72,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get statusDone => 'Abgeschlossen';
+
+  @override
+  String get navMyTasks => 'Aufgaben';
+
+  @override
+  String get myTasksTitle => 'Meine Aufgaben';
+
+  @override
+  String get myTasksEmpty => 'Keine Aufgaben vorhanden.';
+
+  @override
+  String get retry => 'Erneut versuchen';
 }

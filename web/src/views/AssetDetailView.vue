@@ -6,6 +6,7 @@ import { assetApi } from '../api/assetApi'
 import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
 import QrCodePanel from '../components/assets/QrCodePanel.vue'
 import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vue'
+import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vue'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -16,6 +17,7 @@ const workOrders = ref<WorkOrder[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 const showWoForm = ref(false)
+const assigningWoId = ref<string | null>(null)
 
 onMounted(async () => {
   loading.value = true
@@ -33,6 +35,12 @@ onMounted(async () => {
 async function onWoCreated(wo: WorkOrder) {
   showWoForm.value = false
   workOrders.value = [wo, ...workOrders.value]
+}
+
+function onAssigned(wo: WorkOrder) {
+  assigningWoId.value = null
+  const idx = workOrders.value.findIndex(w => w.workOrderId === wo.workOrderId)
+  if (idx !== -1) workOrders.value[idx] = wo
 }
 
 function statusClass(status: WorkOrderStatus): string {
@@ -113,7 +121,28 @@ function statusClass(status: WorkOrderStatus): string {
             </span>
           </div>
           <strong class="asset-detail__wo-title">{{ wo.title }}</strong>
-          <span class="asset-detail__wo-priority">{{ wo.priority }}</span>
+          <div class="asset-detail__wo-meta">
+            <span class="asset-detail__wo-priority">{{ wo.priority }}</span>
+            <span v-if="wo.assignedTechnicianName" class="asset-detail__wo-assignee">
+              {{ t('wo.assignedTo') }}: {{ wo.assignedTechnicianName }}
+            </span>
+            <span v-else class="asset-detail__wo-assignee asset-detail__wo-assignee--none">
+              {{ t('wo.unassigned') }}
+            </span>
+          </div>
+          <button
+            class="btn btn--secondary asset-detail__wo-assign-btn"
+            @click="assigningWoId = assigningWoId === wo.workOrderId ? null : wo.workOrderId"
+          >
+            {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
+          </button>
+          <div v-if="assigningWoId === wo.workOrderId" class="asset-detail__assign-form">
+            <WorkOrderAssignForm
+              :work-order="wo"
+              @assigned="onAssigned"
+              @cancel="assigningWoId = null"
+            />
+          </div>
         </div>
       </div>
     </template>
@@ -228,6 +257,36 @@ function statusClass(status: WorkOrderStatus): string {
 .asset-detail__wo-form {
   margin-bottom: 24px;
   padding: 24px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.asset-detail__wo-meta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.asset-detail__wo-assignee {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.asset-detail__wo-assignee--none {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.asset-detail__wo-assign-btn {
+  align-self: flex-start;
+  font-size: 0.875rem;
+  padding: 6px 12px;
+}
+
+.asset-detail__assign-form {
+  margin-top: 12px;
+  padding: 16px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
 }

@@ -70,4 +70,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusDone => 'Done';
+
+  @override
+  String get navMyTasks => 'Tasks';
+
+  @override
+  String get myTasksTitle => 'My Tasks';
+
+  @override
+  String get myTasksEmpty => 'No tasks assigned.';
+
+  @override
+  String get retry => 'Retry';
 }

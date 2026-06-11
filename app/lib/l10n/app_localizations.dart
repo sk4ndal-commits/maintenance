@@ -223,6 +223,30 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Abgeschlossen'**
   String get statusDone;
+
+  /// No description provided for @navMyTasks.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufgaben'**
+  String get navMyTasks;
+
+  /// No description provided for @myTasksTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Meine Aufgaben'**
+  String get myTasksTitle;
+
+  /// No description provided for @myTasksEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Aufgaben vorhanden.'**
+  String get myTasksEmpty;
+
+  /// No description provided for @retry.
+  ///
+  /// In de, this message translates to:
+  /// **'Erneut versuchen'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

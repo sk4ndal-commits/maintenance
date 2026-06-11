@@ -62,6 +62,13 @@ export default {
     priorityMedium: 'Mittel',
     priorityHigh: 'Hoch',
     create: '+ Work Order erstellen',
+    assign: 'Zuweisen',
+    assignBtn: 'Zuweisen',
+    reassign: 'Neu zuweisen',
+    technician: 'Techniker',
+    selectTechnician: 'Techniker wählen',
+    assignedTo: 'Zugewiesen an',
+    unassigned: 'Nicht zugewiesen',
     status: {
       Open: 'Offen',
       Assigned: 'Zugewiesen',

@@ -27,15 +27,24 @@ public class WorkOrderRepository : IWorkOrderRepository
         return await _context.WorkOrders.FindAsync(workOrderId);
     }
 
-    public async Task<(IEnumerable<WorkOrder> Items, int Total)> GetAllAsync(int page, int pageSize)
+    public async Task<(IEnumerable<WorkOrder> Items, int Total)> GetAllAsync(int page, int pageSize, Guid? technicianId = null)
     {
-        var total = await _context.WorkOrders.CountAsync();
-        var items = await _context.WorkOrders
+        var query = _context.WorkOrders.AsQueryable();
+        if (technicianId.HasValue)
+            query = query.Where(w => w.AssignedTechnicianId == technicianId.Value);
+        var total = await query.CountAsync();
+        var items = await query
             .OrderByDescending(w => w.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
         return (items, total);
+    }
+
+    public async Task UpdateAsync(WorkOrder workOrder)
+    {
+        _context.WorkOrders.Update(workOrder);
+        await _context.SaveChangesAsync();
     }
 
     public async Task AddAsync(WorkOrder workOrder)

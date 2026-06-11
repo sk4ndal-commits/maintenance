@@ -20,6 +20,9 @@ class WorkOrder {
   final String title;
   final WorkOrderStatus status;
   final String priority;
+  final String? description;
+  final String? assignedTechnicianId;
+  final String? assignedTechnicianName;
   final String createdAt;
   final String? completedAt;
 
@@ -29,6 +32,9 @@ class WorkOrder {
     required this.title,
     required this.status,
     required this.priority,
+    this.description,
+    this.assignedTechnicianId,
+    this.assignedTechnicianName,
     required this.createdAt,
     this.completedAt,
   });
@@ -39,6 +45,9 @@ class WorkOrder {
         title: j['title'] as String,
         status: workOrderStatusFromString(j['status'] as String),
         priority: j['priority'] as String,
+        description: j['description'] as String?,
+        assignedTechnicianId: j['assignedTechnicianId'] as String?,
+        assignedTechnicianName: j['assignedTechnicianName'] as String?,
         createdAt: j['createdAt'] as String,
         completedAt: j['completedAt'] as String?,
       );

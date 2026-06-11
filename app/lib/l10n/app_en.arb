@@ -20,5 +20,9 @@
   "statusOpen": "Open",
   "statusAssigned": "Assigned",
   "statusInProgress": "In Progress",
-  "statusDone": "Done"
+  "statusDone": "Done",
+  "navMyTasks": "Tasks",
+  "myTasksTitle": "My Tasks",
+  "myTasksEmpty": "No tasks assigned.",
+  "retry": "Retry"
 }

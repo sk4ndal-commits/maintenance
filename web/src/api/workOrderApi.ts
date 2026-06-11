@@ -20,4 +20,10 @@ export const workOrderApi = {
 
   getById: (id: string): Promise<WorkOrder> =>
     request<WorkOrder>(`/api/work-orders/${id}`),
+
+  assign: (id: string, payload: { workOrderId: string; technicianId: string }): Promise<WorkOrder> =>
+    request<WorkOrder>(`/api/work-orders/${id}/assign`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
 }

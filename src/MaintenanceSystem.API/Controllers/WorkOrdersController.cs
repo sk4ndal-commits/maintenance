@@ -10,12 +10,20 @@ namespace MaintenanceSystem.API.Controllers;
 public class WorkOrdersController : ControllerBase
 {
     private readonly CreateWorkOrderHandler _createHandler;
+    private readonly AssignWorkOrderHandler _assignHandler;
     private readonly IWorkOrderRepository _repo;
+    private readonly IAssignmentHistoryRepository _historyRepo;
 
-    public WorkOrdersController(CreateWorkOrderHandler createHandler, IWorkOrderRepository repo)
+    public WorkOrdersController(
+        CreateWorkOrderHandler createHandler,
+        AssignWorkOrderHandler assignHandler,
+        IWorkOrderRepository repo,
+        IAssignmentHistoryRepository historyRepo)
     {
         _createHandler = createHandler;
+        _assignHandler = assignHandler;
         _repo = repo;
+        _historyRepo = historyRepo;
     }
 
     [HttpPost]
@@ -41,9 +49,34 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] Guid? technicianId = null)
     {
-        var (items, total) = await _repo.GetAllAsync(page, pageSize);
+        var (items, total) = await _repo.GetAllAsync(page, pageSize, technicianId);
         return Ok(new { data = items.Select(WorkOrderDto.From), total, page, pageSize });
+    }
+
+    [HttpPut("{id:guid}/assign")]
+    public async Task<IActionResult> Assign(Guid id, [FromBody] AssignWorkOrderCommand cmd)
+    {
+        if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
+        try
+        {
+            var dto = await _assignHandler.Handle(cmd);
+            return Ok(dto);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpGet("{id:guid}/assignment-history")]
+    public async Task<IActionResult> GetAssignmentHistory(Guid id)
+    {
+        var history = await _historyRepo.GetByWorkOrderIdAsync(id);
+        return Ok(history);
     }
 }

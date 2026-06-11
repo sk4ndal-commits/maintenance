@@ -21,6 +21,9 @@ builder.Services.AddScoped<CreateAssetHandler>();
 builder.Services.AddScoped<UpdateAssetHandler>();
 builder.Services.AddScoped<IQrCodeService, QrCodeService>();
 builder.Services.AddScoped<CreateWorkOrderHandler>();
+builder.Services.AddScoped<AssignWorkOrderHandler>();
+builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+builder.Services.AddScoped<IAssignmentHistoryRepository, AssignmentHistoryRepository>();
 
 builder.Services.AddCors(options =>
 {

@@ -20,5 +20,9 @@
   "statusOpen": "Offen",
   "statusAssigned": "Zugewiesen",
   "statusInProgress": "In Bearbeitung",
-  "statusDone": "Abgeschlossen"
+  "statusDone": "Abgeschlossen",
+  "navMyTasks": "Aufgaben",
+  "myTasksTitle": "Meine Aufgaben",
+  "myTasksEmpty": "Keine Aufgaben vorhanden.",
+  "retry": "Erneut versuchen"
 }

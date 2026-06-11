@@ -27,6 +27,17 @@ export type WorkOrderStatus = 'Open' | 'Assigned' | 'InProgress' | 'Done'
 
 export type WorkOrderPriority = 'Low' | 'Medium' | 'High'
 
+export interface Technician {
+  technicianId: string
+  name: string
+  email: string
+}
+
+export interface AssignWorkOrderPayload {
+  workOrderId: string
+  technicianId: string
+}
+
 export interface WorkOrder {
   workOrderId: string
   assetId: string
@@ -34,6 +45,8 @@ export interface WorkOrder {
   status: WorkOrderStatus
   priority: string
   description?: string
+  assignedTechnicianId?: string
+  assignedTechnicianName?: string
   createdAt: string
   completedAt?: string
 }
