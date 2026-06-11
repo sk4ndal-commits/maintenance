@@ -82,4 +82,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get statusChangeToInProgress => 'Start Work';
+
+  @override
+  String get statusChangeToDone => 'Complete';
+
+  @override
+  String statusChangeError(String message) {
+    return 'Status change failed: $message';
+  }
 }

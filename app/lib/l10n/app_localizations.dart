@@ -227,7 +227,7 @@ abstract class AppLocalizations {
   /// No description provided for @navMyTasks.
   ///
   /// In de, this message translates to:
-  /// **'Aufgaben'**
+  /// **'Meine Aufgaben'**
   String get navMyTasks;
 
   /// No description provided for @myTasksTitle.
@@ -247,6 +247,24 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Erneut versuchen'**
   String get retry;
+
+  /// No description provided for @statusChangeToInProgress.
+  ///
+  /// In de, this message translates to:
+  /// **'Starten'**
+  String get statusChangeToInProgress;
+
+  /// No description provided for @statusChangeToDone.
+  ///
+  /// In de, this message translates to:
+  /// **'Abschließen'**
+  String get statusChangeToDone;
+
+  /// No description provided for @statusChangeError.
+  ///
+  /// In de, this message translates to:
+  /// **'Statusänderung fehlgeschlagen: {message}'**
+  String statusChangeError(String message);
 }
 
 class _AppLocalizationsDelegate

@@ -74,7 +74,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statusDone => 'Abgeschlossen';
 
   @override
-  String get navMyTasks => 'Aufgaben';
+  String get navMyTasks => 'Meine Aufgaben';
 
   @override
   String get myTasksTitle => 'Meine Aufgaben';
@@ -84,4 +84,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get retry => 'Erneut versuchen';
+
+  @override
+  String get statusChangeToInProgress => 'Starten';
+
+  @override
+  String get statusChangeToDone => 'Abschließen';
+
+  @override
+  String statusChangeError(String message) {
+    return 'Statusänderung fehlgeschlagen: $message';
+  }
 }

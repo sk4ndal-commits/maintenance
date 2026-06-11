@@ -179,7 +179,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            wo.priority,
+                            wo.priority.name[0].toUpperCase() + wo.priority.name.substring(1),
                             style: const TextStyle(
                                 fontSize: 13, color: Color(0xFF6b7280)),
                           ),
