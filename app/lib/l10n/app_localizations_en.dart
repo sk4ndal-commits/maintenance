@@ -18,6 +18,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navScan => 'Scan';
 
   @override
+  String get scanInstruction => 'Hold QR code inside the frame';
+
+  @override
+  String get scanInvalidCode => 'Invalid QR code. Please scan an asset code.';
+
+  @override
+  String get scanAssetNotFound => 'Asset not found. Please try again.';
+
+  @override
   String get assetsTitle => 'Assets';
 
   @override

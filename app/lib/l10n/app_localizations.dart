@@ -116,6 +116,24 @@ abstract class AppLocalizations {
   /// **'Scannen'**
   String get navScan;
 
+  /// No description provided for @scanInstruction.
+  ///
+  /// In de, this message translates to:
+  /// **'QR-Code in den Rahmen halten'**
+  String get scanInstruction;
+
+  /// No description provided for @scanInvalidCode.
+  ///
+  /// In de, this message translates to:
+  /// **'Ungültiger QR-Code. Bitte einen Asset-Code scannen.'**
+  String get scanInvalidCode;
+
+  /// No description provided for @scanAssetNotFound.
+  ///
+  /// In de, this message translates to:
+  /// **'Asset nicht gefunden. Bitte erneut versuchen.'**
+  String get scanAssetNotFound;
+
   /// No description provided for @assetsTitle.
   ///
   /// In de, this message translates to:

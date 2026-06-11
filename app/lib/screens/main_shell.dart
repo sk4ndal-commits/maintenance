@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'asset_list_screen.dart';
+import 'qr_scan_screen.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
 
@@ -16,7 +17,7 @@ class _MainShellState extends State<MainShell> {
 
   static const _screens = <Widget>[
     AssetListScreen(),
-    _ScanPlaceholder(),
+    QrScanScreen(),
   ];
 
   @override
@@ -51,13 +52,3 @@ class _MainShellState extends State<MainShell> {
   }
 }
 
-class _ScanPlaceholder extends StatelessWidget {
-  const _ScanPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Icon(Icons.qr_code_scanner, size: 64, color: Color(0xFF1e3a5f)),
-    );
-  }
-}
