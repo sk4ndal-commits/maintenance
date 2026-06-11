@@ -21,7 +21,7 @@
   "statusAssigned": "Zugewiesen",
   "statusInProgress": "In Bearbeitung",
   "statusDone": "Abgeschlossen",
-  "navMyTasks": "Aufgaben",
+  "navMyTasks": "Meine Aufgaben",
   "myTasksTitle": "Meine Aufgaben",
   "myTasksEmpty": "Keine Aufgaben vorhanden.",
   "retry": "Erneut versuchen"

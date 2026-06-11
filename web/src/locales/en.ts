@@ -68,6 +68,13 @@ export default {
       InProgress: 'In Progress',
       Done: 'Done',
     },
+    assign: 'Assign',
+    assignBtn: 'Assign',
+    technician: 'Technician',
+    selectTechnician: 'Select technician',
+    assignedTo: 'Assigned to',
+    unassigned: 'Unassigned',
+    reassign: 'Reassign',
   },
   card: {
     type: 'Type',
