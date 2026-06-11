@@ -5,7 +5,7 @@ import { assetApi } from '../../api/assetApi'
 import type { Asset, CreateAssetPayload } from '../../types/asset'
 
 const { t } = useI18n()
-const emit = defineEmits<{ (e: 'created', asset: Asset): void }>()
+const emit = defineEmits<{ (e: 'created', asset: Asset): void; (e: 'cancel'): void }>()
 
 const form = reactive<CreateAssetPayload>({
   name: '',
@@ -78,9 +78,14 @@ async function submit() {
       </div>
     </details>
 
-    <button type="submit" class="btn btn--primary" :disabled="loading">
-      {{ loading ? t('form.submitting') : t('form.submit') }}
-    </button>
+    <div style="display:flex;gap:12px">
+      <button type="submit" class="btn btn--primary" :disabled="loading">
+        {{ loading ? t('form.submitting') : t('form.submit') }}
+      </button>
+      <button type="button" class="btn btn--secondary" @click="emit('cancel')">
+        {{ t('assets.cancel') }}
+      </button>
+    </div>
   </form>
 </template>
 

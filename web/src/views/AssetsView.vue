@@ -65,8 +65,8 @@ onMounted(loadAssets)
   <div class="assets-view">
     <div class="assets-view__header">
       <h1>{{ t('assets.title') }}</h1>
-      <button class="btn btn--primary" @click="showForm = !showForm">
-        {{ showForm ? t('assets.cancel') : t('assets.create') }}
+      <button class="btn btn--primary" @click="showForm = true">
+        {{ t('assets.create') }}
       </button>
     </div>
 
@@ -75,12 +75,15 @@ onMounted(loadAssets)
       {{ t('assets.qrCode') }}: <code>{{ createdAsset.qrCodePayload }}</code>
     </div>
 
-    <div v-if="showForm" class="assets-view__form-panel">
-      <AssetCreateForm @created="onCreated" />
-    </div>
-
     <div v-if="editingAsset" class="assets-view__form-panel">
       <AssetEditForm :asset="editingAsset" @updated="onUpdated" @cancel="editingAsset = null" />
+    </div>
+
+    <!-- Asset Create Modal -->
+    <div v-if="showForm" class="modal-overlay" @click.self="showForm = false">
+      <div class="modal">
+        <AssetCreateForm @created="onCreated" @cancel="showForm = false" />
+      </div>
     </div>
 
     <div v-if="error" class="alert alert--danger">{{ error }}</div>
@@ -163,5 +166,22 @@ onMounted(loadAssets)
 .assets-view__pagination button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  padding: 32px;
+  min-width: 400px;
+  max-width: 600px;
+  width: 100%;
 }
 </style>

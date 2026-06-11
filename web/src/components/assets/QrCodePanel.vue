@@ -92,13 +92,12 @@ function printQr() {
 
 .qr-panel__actions {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .qr-panel__actions .btn {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   white-space: nowrap;
 }
 

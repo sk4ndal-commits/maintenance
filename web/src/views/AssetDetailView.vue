@@ -141,17 +141,10 @@ function statusClass(status: WorkOrderStatus): string {
                 </div>
                 <button
                   class="btn btn--secondary asset-detail__wo-assign-btn"
-                  @click="assigningWoId = assigningWoId === wo.workOrderId ? null : wo.workOrderId"
+                  @click="assigningWoId = wo.workOrderId"
                 >
                   {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
                 </button>
-                <div v-if="assigningWoId === wo.workOrderId" class="asset-detail__assign-form">
-                  <WorkOrderAssignForm
-                    :work-order="wo"
-                    @assigned="onAssigned"
-                    @cancel="assigningWoId = null"
-                  />
-                </div>
               </div>
             </div>
           </section>
@@ -171,6 +164,18 @@ function statusClass(status: WorkOrderStatus): string {
             :asset-id="asset.assetId"
             @created="onWoCreated"
             @cancel="showWoForm = false"
+          />
+        </div>
+      </div>
+
+      <!-- WO Assign Modal -->
+      <div v-if="assigningWoId" class="modal-overlay" @click.self="assigningWoId = null">
+        <div class="modal">
+          <WorkOrderAssignForm
+            v-if="workOrders.find(w => w.workOrderId === assigningWoId)"
+            :work-order="workOrders.find(w => w.workOrderId === assigningWoId)!"
+            @assigned="onAssigned"
+            @cancel="assigningWoId = null"
           />
         </div>
       </div>
