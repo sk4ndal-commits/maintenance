@@ -7,6 +7,7 @@ import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
 import QrCodePanel from '../components/assets/QrCodePanel.vue'
 import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vue'
 import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vue'
+import WorkOrderChecklistForm from '../components/workorders/WorkOrderChecklistForm.vue'
 import AssetEditForm from '../components/assets/AssetEditForm.vue'
 
 const { t, locale } = useI18n()
@@ -154,6 +155,7 @@ function statusClass(status: WorkOrderStatus): string {
                 >
                   {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
                 </button>
+                <WorkOrderChecklistForm :work-order-id="wo.workOrderId" />
               </div>
             </div>
           </section>

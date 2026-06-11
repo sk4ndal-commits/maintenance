@@ -79,6 +79,11 @@ export default {
     reassign: 'Reassign',
     completedAt: 'Completed at',
     completionNotes: 'Completion notes',
+    checklist: 'Checklist',
+    checklistAdd: 'Add Step',
+    checklistMandatory: 'Required',
+    checklistEmpty: 'No checklist steps.',
+    checklistStep: 'Step description',
   },
   card: {
     type: 'Type',

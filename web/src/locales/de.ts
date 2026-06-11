@@ -73,6 +73,11 @@ export default {
     unassigned: 'Nicht zugewiesen',
     completedAt: 'Abgeschlossen am',
     completionNotes: 'Abschlussnotizen',
+    checklist: 'Checkliste',
+    checklistAdd: 'Schritt hinzufügen',
+    checklistMandatory: 'Pflicht',
+    checklistEmpty: 'Keine Checklistenpunkte.',
+    checklistStep: 'Schrittbeschreibung',
     status: {
       Open: 'Offen',
       Assigned: 'Zugewiesen',

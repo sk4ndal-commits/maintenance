@@ -61,6 +61,21 @@ export interface CreateWorkOrderPayload {
   dueDate?: string
 }
 
+export interface ChecklistStep {
+  id: string
+  workOrderId: string
+  label: string
+  isMandatory: boolean
+  isCompleted: boolean
+  completedAt?: string
+}
+
+export interface AddChecklistStepPayload {
+  workOrderId: string
+  label: string
+  isMandatory: boolean
+}
+
 export interface WorkOrderListResponse {
   data: WorkOrder[]
   total: number

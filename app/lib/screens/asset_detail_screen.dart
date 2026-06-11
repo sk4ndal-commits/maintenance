@@ -3,6 +3,7 @@ import '../l10n/app_localizations.dart';
 import '../models/asset.dart';
 import '../models/work_order.dart';
 import '../services/asset_service.dart';
+import '../services/work_order_service.dart';
 import '../widgets/work_order_card.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
@@ -157,7 +158,33 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
               style: const TextStyle(color: Colors.grey),
             ),
           ..._workOrders.map(
-            (wo) => WorkOrderCard(workOrder: wo),
+            (wo) => WorkOrderCard(
+              workOrder: wo,
+              onTransition: (newStatus) async {
+                try {
+                  final statusStr = switch (newStatus) {
+                    WorkOrderStatus.inProgress => 'InProgress',
+                    WorkOrderStatus.done => 'Done',
+                    WorkOrderStatus.assigned => 'Assigned',
+                    WorkOrderStatus.open => 'Open',
+                  };
+                  final updated = await WorkOrderService().changeStatus(
+                    wo.workOrderId,
+                    statusStr,
+                  );
+                  setState(() {
+                    final idx = _workOrders.indexWhere((w) => w.workOrderId == updated.workOrderId);
+                    if (idx != -1) _workOrders[idx] = updated;
+                  });
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+                    );
+                  }
+                }
+              },
+            ),
           ),
         ],
         ),

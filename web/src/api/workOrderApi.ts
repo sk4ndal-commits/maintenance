@@ -1,4 +1,4 @@
-import type { WorkOrder, CreateWorkOrderPayload, WorkOrderListResponse } from '../types/asset'
+import type { WorkOrder, CreateWorkOrderPayload, WorkOrderListResponse, ChecklistStep, AddChecklistStepPayload } from '../types/asset'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 
@@ -23,6 +23,21 @@ export const workOrderApi = {
 
   assign: (id: string, payload: { workOrderId: string; technicianId: string }): Promise<WorkOrder> =>
     request<WorkOrder>(`/api/work-orders/${id}/assign`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  getChecklist: (id: string): Promise<ChecklistStep[]> =>
+    request<ChecklistStep[]>(`/api/work-orders/${id}/checklist`),
+
+  addChecklistStep: (id: string, payload: AddChecklistStepPayload): Promise<ChecklistStep> =>
+    request<ChecklistStep>(`/api/work-orders/${id}/checklist`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  toggleChecklistStep: (id: string, stepId: string, payload: { workOrderId: string; stepId: string; isCompleted: boolean }): Promise<ChecklistStep> =>
+    request<ChecklistStep>(`/api/work-orders/${id}/checklist/${stepId}`, {
       method: 'PUT',
       body: JSON.stringify(payload),
     }),
