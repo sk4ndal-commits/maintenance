@@ -40,5 +40,10 @@
   "documentsNotes": "Notizen",
   "documentsCamera": "Foto aufnehmen",
   "documentsGallery": "Aus Galerie",
-  "documentsEmpty": "Keine Dokumente hochgeladen."
+  "documentsEmpty": "Keine Dokumente hochgeladen.",
+  "completionTitle": "Wartungsauftrag abschließen",
+  "completionNotes": "Abschlussnotizen",
+  "completionSubmit": "Als erledigt markieren",
+  "completionSubmitting": "Wird abgeschlossen...",
+  "cancel": "Abbrechen"
 }

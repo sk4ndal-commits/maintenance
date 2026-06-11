@@ -30,6 +30,7 @@ builder.Services.AddScoped<IAssignmentHistoryRepository, AssignmentHistoryReposi
 builder.Services.AddScoped<IChecklistStepRepository, ChecklistStepRepository>();
 builder.Services.AddScoped<AddChecklistStepHandler>();
 builder.Services.AddScoped<CompleteChecklistStepHandler>();
+builder.Services.AddScoped<CompleteWorkOrderHandler>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddScoped<IMaintenanceDocumentRepository, MaintenanceDocumentRepository>();
 builder.Services.AddScoped<UploadMaintenanceDocumentHandler>();

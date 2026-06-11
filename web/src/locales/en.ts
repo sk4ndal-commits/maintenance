@@ -77,6 +77,8 @@ export default {
     assignedTo: 'Assigned to',
     unassigned: 'Unassigned',
     reassign: 'Reassign',
+    completedAt: 'Completed at',
+    completionNotes: 'Completion notes',
   },
   card: {
     type: 'Type',

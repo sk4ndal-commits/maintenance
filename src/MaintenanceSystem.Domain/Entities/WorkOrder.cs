@@ -13,6 +13,7 @@ public class WorkOrder
     public string? AssignedTechnicianName { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? CompletedAt { get; private set; }
+    public string? CompletionNotes { get; private set; }
 
     private WorkOrder() { }
 
@@ -41,6 +42,19 @@ public class WorkOrder
         }
 
         Status = newStatus;
+    }
+
+    public void Complete(IEnumerable<ChecklistStep> steps, string? completionNotes)
+    {
+        var mandatorySteps = steps.ToList();
+        var incomplete = mandatorySteps.Where(s => s.IsMandatory && !s.IsCompleted).ToList();
+        if (incomplete.Count != 0)
+            throw new InvalidOperationException(
+                $"Cannot complete: {incomplete.Count} mandatory checklist step(s) not done.");
+
+        Status = WorkOrderStatus.Done;
+        CompletedAt = DateTime.UtcNow;
+        CompletionNotes = completionNotes;
     }
 
     public void Assign(Guid technicianId, string technicianName)

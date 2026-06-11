@@ -71,6 +71,8 @@ export default {
     selectTechnician: 'Techniker wählen',
     assignedTo: 'Zugewiesen an',
     unassigned: 'Nicht zugewiesen',
+    completedAt: 'Abgeschlossen am',
+    completionNotes: 'Abschlussnotizen',
     status: {
       Open: 'Offen',
       Assigned: 'Zugewiesen',

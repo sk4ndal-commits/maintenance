@@ -132,4 +132,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get documentsEmpty => 'Keine Dokumente hochgeladen.';
+
+  @override
+  String get completionTitle => 'Wartungsauftrag abschließen';
+
+  @override
+  String get completionNotes => 'Abschlussnotizen';
+
+  @override
+  String get completionSubmit => 'Als erledigt markieren';
+
+  @override
+  String get completionSubmitting => 'Wird abgeschlossen...';
+
+  @override
+  String get cancel => 'Abbrechen';
 }

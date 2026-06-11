@@ -76,4 +76,18 @@ class WorkOrderService {
     if (res.statusCode != 201) throw Exception('Upload failed: ${res.statusCode}');
     return MaintenanceDocument.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
   }
+
+  Future<WorkOrder> completeWorkOrder(String workOrderId, String? completionNotes) async {
+    final res = await http.post(
+      Uri.parse('$_base/api/work-orders/$workOrderId/complete'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'workOrderId': workOrderId, 'completionNotes': completionNotes}),
+    );
+    if (res.statusCode == 422) {
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+      throw Exception(body['message'] ?? 'Cannot complete work order');
+    }
+    if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
+    return WorkOrder.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+  }
 }

@@ -62,6 +62,11 @@ public class AppDbContext : DbContext
             e.Property(s => s.Label).IsRequired().HasMaxLength(500);
         });
 
+        modelBuilder.Entity<WorkOrder>(e =>
+        {
+            e.Property(w => w.CompletionNotes).HasMaxLength(2000);
+        });
+
         modelBuilder.Entity<MaintenanceDocument>(e =>
         {
             e.HasKey(d => d.Id);

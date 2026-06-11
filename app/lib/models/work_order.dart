@@ -34,6 +34,7 @@ class WorkOrder {
   final String createdAt;
   final String? completedAt;
   final String? dueDate;
+  final String? completionNotes;
 
   const WorkOrder({
     required this.workOrderId,
@@ -47,6 +48,7 @@ class WorkOrder {
     this.assignedTechnicianName,
     required this.createdAt,
     this.completedAt,
+    this.completionNotes,
   });
 
   factory WorkOrder.fromJson(Map<String, dynamic> j) => WorkOrder(
@@ -61,5 +63,6 @@ class WorkOrder {
         assignedTechnicianName: j['assignedTechnicianName'] as String?,
         createdAt: j['createdAt'] as String,
         completedAt: j['completedAt'] as String?,
+        completionNotes: j['completionNotes'] as String?,
       );
 }

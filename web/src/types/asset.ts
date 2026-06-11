@@ -49,6 +49,7 @@ export interface WorkOrder {
   assignedTechnicianName?: string
   createdAt: string
   completedAt?: string
+  completionNotes?: string
   dueDate?: string
 }
 

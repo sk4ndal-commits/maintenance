@@ -3,7 +3,9 @@ import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
 import 'checklist_widget.dart';
 import 'maintenance_document_widget.dart';
+import '../services/work_order_service.dart';
 import 'status_transition_button.dart';
+import 'work_order_completion_form.dart';
 import 'work_order_priority_badge.dart';
 
 class WorkOrderCard extends StatefulWidget {
@@ -93,8 +95,41 @@ class _WorkOrderCardState extends State<WorkOrderCard> {
               const SizedBox(height: 8),
               StatusTransitionButton(
                 workOrder: wo,
-                onTransition: widget.onTransition!,
                 canComplete: _mandatoryComplete,
+                onTransition: (newStatus) async {
+                  if (newStatus == WorkOrderStatus.done) {
+                    await showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) => Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: WorkOrderCompletionForm(
+                          workOrder: wo,
+                          onComplete: (notes) async {
+                            Navigator.pop(context);
+                            try {
+                              await WorkOrderService()
+                                  .completeWorkOrder(wo.workOrderId, notes);
+                              await widget.onTransition!(WorkOrderStatus.done);
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(e.toString()),
+                                      backgroundColor: Colors.red),
+                                );
+                              }
+                            }
+                          },
+                          onCancel: () => Navigator.pop(context),
+                        ),
+                      ),
+                    );
+                  } else {
+                    await widget.onTransition!(newStatus);
+                  }
+                },
               ),
             ],
           ],

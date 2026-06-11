@@ -40,5 +40,10 @@
   "documentsNotes": "Notes",
   "documentsCamera": "Take Photo",
   "documentsGallery": "From Gallery",
-  "documentsEmpty": "No documents uploaded."
+  "documentsEmpty": "No documents uploaded.",
+  "completionTitle": "Complete Work Order",
+  "completionNotes": "Completion Notes",
+  "completionSubmit": "Mark as Done",
+  "completionSubmitting": "Completing...",
+  "cancel": "Cancel"
 }

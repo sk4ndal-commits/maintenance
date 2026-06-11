@@ -130,4 +130,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get documentsEmpty => 'No documents uploaded.';
+
+  @override
+  String get completionTitle => 'Complete Work Order';
+
+  @override
+  String get completionNotes => 'Completion Notes';
+
+  @override
+  String get completionSubmit => 'Mark as Done';
+
+  @override
+  String get completionSubmitting => 'Completing...';
+
+  @override
+  String get cancel => 'Cancel';
 }

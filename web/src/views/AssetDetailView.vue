@@ -139,7 +139,16 @@ function statusClass(status: WorkOrderStatus): string {
                     {{ t('wo.unassigned') }}
                   </span>
                 </div>
+                <div v-if="wo.status === 'Done'" class="asset-detail__wo-completion">
+                  <span class="asset-detail__wo-completed-at">
+                    {{ t('wo.completedAt') }}: {{ wo.completedAt ? new Date(wo.completedAt).toLocaleDateString(locale) : '—' }}
+                  </span>
+                  <span v-if="wo.completionNotes" class="asset-detail__wo-completion-notes">
+                    {{ wo.completionNotes }}
+                  </span>
+                </div>
                 <button
+                  v-if="wo.status !== 'Done'"
                   class="btn btn--secondary asset-detail__wo-assign-btn"
                   @click="assigningWoId = wo.workOrderId"
                 >
@@ -359,6 +368,19 @@ function statusClass(status: WorkOrderStatus): string {
   padding: 16px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
+}
+
+.asset-detail__wo-completion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.asset-detail__wo-completion-notes {
+  font-style: italic;
 }
 
 .badge--priority-high   { background: #fee2e2; color: #b91c1c; }

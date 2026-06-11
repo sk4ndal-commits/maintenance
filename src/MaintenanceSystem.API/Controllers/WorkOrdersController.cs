@@ -14,6 +14,7 @@ public class WorkOrdersController : ControllerBase
     private readonly ChangeWorkOrderStatusHandler _statusHandler;
     private readonly AddChecklistStepHandler _addStepHandler;
     private readonly CompleteChecklistStepHandler _completeStepHandler;
+    private readonly CompleteWorkOrderHandler _completeHandler;
     private readonly UploadMaintenanceDocumentHandler _uploadDocHandler;
     private readonly IWorkOrderRepository _repo;
     private readonly IAssignmentHistoryRepository _historyRepo;
@@ -27,6 +28,7 @@ public class WorkOrdersController : ControllerBase
         ChangeWorkOrderStatusHandler statusHandler,
         AddChecklistStepHandler addStepHandler,
         CompleteChecklistStepHandler completeStepHandler,
+        CompleteWorkOrderHandler completeHandler,
         UploadMaintenanceDocumentHandler uploadDocHandler,
         IWorkOrderRepository repo,
         IAssignmentHistoryRepository historyRepo,
@@ -39,6 +41,7 @@ public class WorkOrdersController : ControllerBase
         _statusHandler = statusHandler;
         _addStepHandler = addStepHandler;
         _completeStepHandler = completeStepHandler;
+        _completeHandler = completeHandler;
         _uploadDocHandler = uploadDocHandler;
         _repo = repo;
         _historyRepo = historyRepo;
@@ -137,6 +140,19 @@ public class WorkOrdersController : ControllerBase
             return CreatedAtAction(nameof(GetChecklist), new { id }, dto);
         }
         catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+    }
+
+    [HttpPost("{id:guid}/complete")]
+    public async Task<IActionResult> Complete(Guid id, [FromBody] CompleteWorkOrderCommand cmd)
+    {
+        if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
+        try
+        {
+            var dto = await _completeHandler.Handle(cmd);
+            return Ok(dto);
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+        catch (InvalidOperationException ex) { return UnprocessableEntity(new { message = ex.Message }); }
     }
 
     [HttpPost("{id:guid}/documents")]

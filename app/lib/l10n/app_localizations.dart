@@ -337,6 +337,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Keine Dokumente hochgeladen.'**
   String get documentsEmpty;
+
+  /// No description provided for @completionTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Wartungsauftrag abschließen'**
+  String get completionTitle;
+
+  /// No description provided for @completionNotes.
+  ///
+  /// In de, this message translates to:
+  /// **'Abschlussnotizen'**
+  String get completionNotes;
+
+  /// No description provided for @completionSubmit.
+  ///
+  /// In de, this message translates to:
+  /// **'Als erledigt markieren'**
+  String get completionSubmit;
+
+  /// No description provided for @completionSubmitting.
+  ///
+  /// In de, this message translates to:
+  /// **'Wird abgeschlossen...'**
+  String get completionSubmitting;
+
+  /// No description provided for @cancel.
+  ///
+  /// In de, this message translates to:
+  /// **'Abbrechen'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate
