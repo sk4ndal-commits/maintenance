@@ -367,6 +367,48 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Abbrechen'**
   String get cancel;
+
+  /// No description provided for @startWork.
+  ///
+  /// In de, this message translates to:
+  /// **'Arbeit starten'**
+  String get startWork;
+
+  /// No description provided for @continueWork.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiterarbeiten'**
+  String get continueWork;
+
+  /// No description provided for @checklistNext.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get checklistNext;
+
+  /// No description provided for @back.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurück'**
+  String get back;
+
+  /// No description provided for @checklistRequiresPhoto.
+  ///
+  /// In de, this message translates to:
+  /// **'Foto erforderlich'**
+  String get checklistRequiresPhoto;
+
+  /// No description provided for @checklistStepOf.
+  ///
+  /// In de, this message translates to:
+  /// **'Schritt {current} von {total}'**
+  String checklistStepOf(int current, int total);
+
+  /// No description provided for @completedAt.
+  ///
+  /// In de, this message translates to:
+  /// **'Abgeschlossen am'**
+  String get completedAt;
 }
 
 class _AppLocalizationsDelegate

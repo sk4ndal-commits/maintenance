@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
-import 'checklist_widget.dart';
-import 'maintenance_document_widget.dart';
-import '../services/work_order_service.dart';
-import 'status_transition_button.dart';
-import 'work_order_completion_form.dart';
+import '../screens/checklist_wizard_screen.dart';
 import 'work_order_priority_badge.dart';
 
 class WorkOrderCard extends StatefulWidget {
@@ -25,8 +21,6 @@ class WorkOrderCard extends StatefulWidget {
 }
 
 class _WorkOrderCardState extends State<WorkOrderCard> {
-  bool _mandatoryComplete = true;
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -42,7 +36,26 @@ class _WorkOrderCardState extends State<WorkOrderCard> {
     return Card(
       shape: const RoundedRectangleBorder(),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Padding(
+      child: InkWell(
+        onTap: widget.onTransition != null &&
+                (wo.status == WorkOrderStatus.assigned ||
+                    wo.status == WorkOrderStatus.inProgress)
+            ? () async {
+                final result = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChecklistWizardScreen(
+                      workOrder: wo,
+                      onWorkOrderUpdated: (updated) {
+                        widget.onTransition!(updated.status);
+                      },
+                    ),
+                  ),
+                );
+                if (result == true) setState(() {});
+              }
+            : null,
+        child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,53 +99,49 @@ class _WorkOrderCardState extends State<WorkOrderCard> {
               ),
             if (widget.onTransition != null) ...[
               const SizedBox(height: 8),
-              ChecklistWidget(
-                workOrderId: wo.workOrderId,
-                onMandatoryComplete: (done) => setState(() => _mandatoryComplete = done),
-              ),
-              const SizedBox(height: 8),
-              MaintenanceDocumentWidget(workOrderId: wo.workOrderId),
-              const SizedBox(height: 8),
-              StatusTransitionButton(
-                workOrder: wo,
-                canComplete: _mandatoryComplete,
-                onTransition: (newStatus) async {
-                  if (newStatus == WorkOrderStatus.done) {
-                    await showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (_) => Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: WorkOrderCompletionForm(
-                          workOrder: wo,
-                          onComplete: (notes) async {
-                            Navigator.pop(context);
-                            try {
-                              await WorkOrderService()
-                                  .completeWorkOrder(wo.workOrderId, notes);
-                              await widget.onTransition!(WorkOrderStatus.done);
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(e.toString()),
-                                      backgroundColor: Colors.red),
-                                );
-                              }
-                            }
-                          },
-                          onCancel: () => Navigator.pop(context),
+              if (wo.status == WorkOrderStatus.assigned || wo.status == WorkOrderStatus.inProgress)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.play_arrow),
+                    label: Text(wo.status == WorkOrderStatus.assigned
+                        ? l10n.startWork
+                        : l10n.continueWork),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1e3a5f),
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      final result = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChecklistWizardScreen(
+                            workOrder: wo,
+                            onWorkOrderUpdated: (updated) {
+                              widget.onTransition!(updated.status);
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  } else {
-                    await widget.onTransition!(newStatus);
-                  }
-                },
-              ),
+                      );
+                      if (result == true) {
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+              if (wo.status == WorkOrderStatus.done)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    wo.completedAt != null
+                        ? '${l10n.completedAt}: ${wo.completedAt!.substring(0, 10)}'
+                        : l10n.statusDone,
+                    style: const TextStyle(fontSize: 12, color: Colors.green),
+                  ),
+                ),
             ],
           ],
+        ),
         ),
       ),
     );

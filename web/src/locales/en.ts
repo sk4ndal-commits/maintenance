@@ -84,6 +84,7 @@ export default {
     checklistMandatory: 'Required',
     checklistEmpty: 'No checklist steps.',
     checklistStep: 'Step description',
+    checklistRequiresPhoto: 'Requires photo',
   },
   card: {
     type: 'Type',

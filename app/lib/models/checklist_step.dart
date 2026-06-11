@@ -3,6 +3,7 @@ class ChecklistStep {
   final String workOrderId;
   final String label;
   final bool isMandatory;
+  final bool requiresPhoto;
   final bool isCompleted;
   final String? completedAt;
 
@@ -11,6 +12,7 @@ class ChecklistStep {
     required this.workOrderId,
     required this.label,
     required this.isMandatory,
+    required this.requiresPhoto,
     required this.isCompleted,
     this.completedAt,
   });
@@ -20,6 +22,7 @@ class ChecklistStep {
         workOrderId: j['workOrderId'] as String,
         label: j['label'] as String,
         isMandatory: j['isMandatory'] as bool,
+        requiresPhoto: j['requiresPhoto'] as bool? ?? false,
         isCompleted: j['isCompleted'] as bool,
         completedAt: j['completedAt'] as String?,
       );
@@ -29,6 +32,7 @@ class ChecklistStep {
         workOrderId: workOrderId,
         label: label,
         isMandatory: isMandatory,
+        requiresPhoto: requiresPhoto,
         isCompleted: isCompleted ?? this.isCompleted,
         completedAt: completedAt,
       );

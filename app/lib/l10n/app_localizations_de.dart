@@ -147,4 +147,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get cancel => 'Abbrechen';
+
+  @override
+  String get startWork => 'Arbeit starten';
+
+  @override
+  String get continueWork => 'Weiterarbeiten';
+
+  @override
+  String get checklistNext => 'Weiter';
+
+  @override
+  String get back => 'Zurück';
+
+  @override
+  String get checklistRequiresPhoto => 'Foto erforderlich';
+
+  @override
+  String checklistStepOf(int current, int total) {
+    return 'Schritt $current von $total';
+  }
+
+  @override
+  String get completedAt => 'Abgeschlossen am';
 }

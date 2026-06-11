@@ -91,14 +91,15 @@ class _MaintenanceDocumentWidgetState extends State<MaintenanceDocumentWidget> {
           maxLines: 2,
         ),
         const SizedBox(height: 8),
-        Row(
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
           children: [
             ElevatedButton.icon(
               icon: const Icon(Icons.camera_alt, size: 18),
               label: Text(l10n.documentsCamera),
               onPressed: () => _pickAndUpload(ImageSource.camera),
             ),
-            const SizedBox(width: 8),
             ElevatedButton.icon(
               icon: const Icon(Icons.photo_library, size: 18),
               label: Text(l10n.documentsGallery),

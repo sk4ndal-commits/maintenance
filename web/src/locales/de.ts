@@ -78,6 +78,7 @@ export default {
     checklistMandatory: 'Pflicht',
     checklistEmpty: 'Keine Checklistenpunkte.',
     checklistStep: 'Schrittbeschreibung',
+    checklistRequiresPhoto: 'Foto erforderlich',
     status: {
       Open: 'Offen',
       Assigned: 'Zugewiesen',

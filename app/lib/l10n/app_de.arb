@@ -45,5 +45,18 @@
   "completionNotes": "Abschlussnotizen",
   "completionSubmit": "Als erledigt markieren",
   "completionSubmitting": "Wird abgeschlossen...",
-  "cancel": "Abbrechen"
+  "cancel": "Abbrechen",
+  "startWork": "Arbeit starten",
+  "continueWork": "Weiterarbeiten",
+  "checklistNext": "Weiter",
+  "back": "Zurück",
+  "checklistRequiresPhoto": "Foto erforderlich",
+  "checklistStepOf": "Schritt {current} von {total}",
+  "@checklistStepOf": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "completedAt": "Abgeschlossen am"
 }

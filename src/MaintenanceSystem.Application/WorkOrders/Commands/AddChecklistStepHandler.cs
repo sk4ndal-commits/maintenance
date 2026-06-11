@@ -20,7 +20,7 @@ public class AddChecklistStepHandler
         var wo = await _woRepo.GetByIdAsync(cmd.WorkOrderId)
             ?? throw new KeyNotFoundException("WorkOrder not found");
 
-        var step = ChecklistStep.Create(wo.WorkOrderId, cmd.Label, cmd.IsMandatory);
+        var step = ChecklistStep.Create(wo.WorkOrderId, cmd.Label, cmd.IsMandatory, cmd.RequiresPhoto);
         await _repo.AddAsync(step);
         return ChecklistStepDto.From(step);
     }

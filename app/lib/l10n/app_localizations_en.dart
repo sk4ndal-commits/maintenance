@@ -145,4 +145,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get startWork => 'Start Work';
+
+  @override
+  String get continueWork => 'Continue Work';
+
+  @override
+  String get checklistNext => 'Next';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get checklistRequiresPhoto => 'Photo required';
+
+  @override
+  String checklistStepOf(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get completedAt => 'Completed at';
 }

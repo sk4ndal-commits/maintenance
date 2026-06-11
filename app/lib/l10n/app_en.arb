@@ -45,5 +45,18 @@
   "completionNotes": "Completion Notes",
   "completionSubmit": "Mark as Done",
   "completionSubmitting": "Completing...",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "startWork": "Start Work",
+  "continueWork": "Continue Work",
+  "checklistNext": "Next",
+  "back": "Back",
+  "checklistRequiresPhoto": "Photo required",
+  "checklistStepOf": "Step {current} of {total}",
+  "@checklistStepOf": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "completedAt": "Completed at"
 }

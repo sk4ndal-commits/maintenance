@@ -66,6 +66,7 @@ export interface ChecklistStep {
   workOrderId: string
   label: string
   isMandatory: boolean
+  requiresPhoto: boolean
   isCompleted: boolean
   completedAt?: string
 }
@@ -74,6 +75,7 @@ export interface AddChecklistStepPayload {
   workOrderId: string
   label: string
   isMandatory: boolean
+  requiresPhoto: boolean
 }
 
 export interface WorkOrderListResponse {

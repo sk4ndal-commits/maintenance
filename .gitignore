@@ -1,5 +1,5 @@
 # ── .NET ────────────────────────────────────────
-bin/
+*/bin/
 obj/
 *.user
 *.suo
@@ -42,3 +42,6 @@ Thumbs.db
 # ── Logs ─────────────────────────────────────────
 *.log
 logs/
+/src/MaintenanceSystem.API/bin/
+/src/MaintenanceSystem.Infrastructure/bin/
+/src/MaintenanceSystem.Application/bin/

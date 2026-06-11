@@ -10,6 +10,7 @@ const props = defineProps<{ workOrderId: string }>()
 const steps = ref<ChecklistStep[]>([])
 const newLabel = ref('')
 const newMandatory = ref(false)
+const newRequiresPhoto = ref(false)
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -26,10 +27,12 @@ async function addStep() {
       workOrderId: props.workOrderId,
       label: newLabel.value.trim(),
       isMandatory: newMandatory.value,
+      requiresPhoto: newRequiresPhoto.value,
     })
     steps.value.push(step)
     newLabel.value = ''
     newMandatory.value = false
+    newRequiresPhoto.value = false
   } catch (e: unknown) {
     error.value = e instanceof Error ? e.message : t('form.errorUnknown')
   } finally {
@@ -80,6 +83,10 @@ async function toggleStep(step: ChecklistStep) {
       <label class="checklist-form__mandatory-toggle">
         <input type="checkbox" v-model="newMandatory" />
         {{ t('wo.checklistMandatory') }}
+      </label>
+      <label class="checklist-form__mandatory-toggle">
+        <input type="checkbox" v-model="newRequiresPhoto" />
+        {{ t('wo.checklistRequiresPhoto') }}
       </label>
       <button type="submit" class="btn btn--secondary" :disabled="loading || !newLabel.trim()">
         {{ t('wo.checklistAdd') }}
