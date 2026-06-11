@@ -1,0 +1,44 @@
+# ── .NET ────────────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Published output
+publish/
+out/
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Rider / JetBrains
+.idea/
+.junie/
+
+# ── Node / Vue ───────────────────────────────────
+web/node_modules/
+web/dist/
+web/.env.local
+web/.env.*.local
+
+# Vite cache
+web/.vite/
+
+# TypeScript build info
+web/*.tsbuildinfo
+
+# ── OS ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────
+*.log
+logs/
