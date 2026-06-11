@@ -1,4 +1,5 @@
 using MaintenanceSystem.Application.Assets.Commands;
+using MaintenanceSystem.Application.WorkOrders.Commands;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Infrastructure.Persistence;
 using MaintenanceSystem.Infrastructure.Services;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<CreateAssetHandler>();
 builder.Services.AddScoped<UpdateAssetHandler>();
 builder.Services.AddScoped<IQrCodeService, QrCodeService>();
+builder.Services.AddScoped<CreateWorkOrderHandler>();
 
 builder.Services.AddCors(options =>
 {

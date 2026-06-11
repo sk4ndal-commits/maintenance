@@ -54,6 +54,21 @@ export default {
     print: 'Print',
     errorLoading: 'Failed to load QR code',
   },
+  wo: {
+    createTitle: 'Create Work Order',
+    title: 'Title',
+    priority: 'Priority',
+    priorityLow: 'Low',
+    priorityMedium: 'Medium',
+    priorityHigh: 'High',
+    create: '+ Create Work Order',
+    status: {
+      Open: 'Open',
+      Assigned: 'Assigned',
+      InProgress: 'In Progress',
+      Done: 'Done',
+    },
+  },
   card: {
     type: 'Type',
     location: 'Location',

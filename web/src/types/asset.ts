@@ -25,14 +25,31 @@ export interface CreateAssetPayload {
 
 export type WorkOrderStatus = 'Open' | 'Assigned' | 'InProgress' | 'Done'
 
+export type WorkOrderPriority = 'Low' | 'Medium' | 'High'
+
 export interface WorkOrder {
   workOrderId: string
   assetId: string
   title: string
   status: WorkOrderStatus
   priority: string
+  description?: string
   createdAt: string
   completedAt?: string
+}
+
+export interface CreateWorkOrderPayload {
+  assetId: string
+  title: string
+  priority: WorkOrderPriority
+  description?: string
+}
+
+export interface WorkOrderListResponse {
+  data: WorkOrder[]
+  total: number
+  page: number
+  pageSize: number
 }
 
 export interface AssetListResponse {

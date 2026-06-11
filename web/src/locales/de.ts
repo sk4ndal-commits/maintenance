@@ -54,6 +54,21 @@ export default {
     print: 'Drucken',
     errorLoading: 'QR-Code konnte nicht geladen werden',
   },
+  wo: {
+    createTitle: 'Work Order erstellen',
+    title: 'Titel',
+    priority: 'Priorität',
+    priorityLow: 'Niedrig',
+    priorityMedium: 'Mittel',
+    priorityHigh: 'Hoch',
+    create: '+ Work Order erstellen',
+    status: {
+      Open: 'Offen',
+      Assigned: 'Zugewiesen',
+      InProgress: 'In Bearbeitung',
+      Done: 'Abgeschlossen',
+    },
+  },
   card: {
     type: 'Typ',
     location: 'Standort',

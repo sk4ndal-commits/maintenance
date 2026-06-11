@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { assetApi } from '../api/assetApi'
 import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
 import QrCodePanel from '../components/assets/QrCodePanel.vue'
+import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vue'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -14,6 +15,7 @@ const asset = ref<Asset | null>(null)
 const workOrders = ref<WorkOrder[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
+const showWoForm = ref(false)
 
 onMounted(async () => {
   loading.value = true
@@ -27,6 +29,11 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+async function onWoCreated(wo: WorkOrder) {
+  showWoForm.value = false
+  workOrders.value = [wo, ...workOrders.value]
+}
 
 function statusClass(status: WorkOrderStatus): string {
   return {
@@ -78,6 +85,20 @@ function statusClass(status: WorkOrderStatus): string {
       <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" class="asset-detail__qr" />
 
       <h2 class="asset-detail__section-title">{{ t('detail.workOrders') }}</h2>
+
+      <div class="asset-detail__wo-actions">
+        <button class="btn btn--primary" @click="showWoForm = !showWoForm">
+          {{ showWoForm ? t('assets.cancel') : t('wo.create') }}
+        </button>
+      </div>
+
+      <div v-if="showWoForm" class="asset-detail__wo-form">
+        <WorkOrderCreateForm
+          :asset-id="asset.assetId"
+          @created="onWoCreated"
+          @cancel="showWoForm = false"
+        />
+      </div>
 
       <p v-if="workOrders.length === 0" class="asset-detail__empty">
         {{ t('detail.noWorkOrders') }}
@@ -198,5 +219,16 @@ function statusClass(status: WorkOrderStatus): string {
 .asset-detail__wo-priority {
   font-size: 0.875rem;
   color: #6b7280;
+}
+
+.asset-detail__wo-actions {
+  margin-bottom: 16px;
+}
+
+.asset-detail__wo-form {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
 }
 </style>
