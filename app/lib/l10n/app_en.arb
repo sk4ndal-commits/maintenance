@@ -28,5 +28,8 @@
   "statusChangeToInProgress": "Start Work",
   "statusChangeToDone": "Complete",
   "statusChangeError": "Status change failed: {message}",
-  "@statusChangeError": { "placeholders": { "message": { "type": "String" } } }
+  "@statusChangeError": { "placeholders": { "message": { "type": "String" } } },
+  "priorityLow": "Low",
+  "priorityMedium": "Medium",
+  "priorityHigh": "High"
 }

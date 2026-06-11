@@ -45,8 +45,8 @@ export default {
     description: 'Beschreibung',
     created: 'Erstellt',
     qrCode: 'QR-Code',
-    workOrders: 'Letzte Work Orders',
-    noWorkOrders: 'Keine Work Orders vorhanden.',
+    workOrders: 'Letzte Wartungsaufträge',
+    noWorkOrders: 'Keine Wartungsaufträge vorhanden.'
   },
   qr: {
     title: 'QR-Code',
@@ -55,14 +55,15 @@ export default {
     errorLoading: 'QR-Code konnte nicht geladen werden',
   },
   wo: {
-    createTitle: 'Work Order erstellen',
+    createTitle: 'Wartungsauftrag erstellen',
+    submitBtn: 'Wartungsauftrag erstellen',
     title: 'Titel',
     priority: 'Priorität',
     priorityLow: 'Niedrig',
     priorityMedium: 'Mittel',
     priorityHigh: 'Hoch',
     dueDate: 'Fälligkeit',
-    create: '+ Work Order erstellen',
+    create: '+ Wartungsauftrag erstellen',
     assign: 'Zuweisen',
     assignBtn: 'Zuweisen',
     reassign: 'Neu zuweisen',

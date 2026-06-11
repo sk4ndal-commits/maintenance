@@ -7,6 +7,7 @@ import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
 import QrCodePanel from '../components/assets/QrCodePanel.vue'
 import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vue'
 import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vue'
+import AssetEditForm from '../components/assets/AssetEditForm.vue'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -17,6 +18,7 @@ const workOrders = ref<WorkOrder[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 const showWoForm = ref(false)
+const showEditForm = ref(false)
 const assigningWoId = ref<string | null>(null)
 
 onMounted(async () => {
@@ -37,10 +39,23 @@ async function onWoCreated(wo: WorkOrder) {
   workOrders.value = [wo, ...workOrders.value]
 }
 
+function onAssetSaved(updated: Asset) {
+  asset.value = updated
+  showEditForm.value = false
+}
+
 function onAssigned(wo: WorkOrder) {
   assigningWoId.value = null
   const idx = workOrders.value.findIndex(w => w.workOrderId === wo.workOrderId)
   if (idx !== -1) workOrders.value[idx] = wo
+}
+
+function priorityClass(priority: string): string {
+  return {
+    High:   'badge--priority-high',
+    Medium: 'badge--priority-medium',
+    Low:    'badge--priority-low',
+  }[priority] ?? ''
 }
 
 function statusClass(status: WorkOrderStatus): string {
@@ -68,81 +83,106 @@ function statusClass(status: WorkOrderStatus): string {
           <h1 class="asset-detail__name">{{ asset.name }}</h1>
           <span class="badge">{{ asset.type }}</span>
         </div>
+        <button class="btn btn--secondary" @click="showEditForm = true">{{ t('form.editTitle') }}</button>
       </div>
 
-      <div class="asset-detail__card">
-        <div class="asset-detail__row">
-          <span class="asset-detail__label">{{ t('detail.location') }}</span>
-          <span>📍 {{ asset.location }}</span>
-        </div>
-        <div v-if="asset.description" class="asset-detail__row">
-          <span class="asset-detail__label">{{ t('detail.description') }}</span>
-          <span>{{ asset.description }}</span>
-        </div>
-        <div class="asset-detail__row">
-          <span class="asset-detail__label">{{ t('detail.created') }}</span>
-          <span>{{ new Date(asset.createdAt).toLocaleDateString(locale) }}</span>
-        </div>
-        <div class="asset-detail__row">
-          <span class="asset-detail__label">{{ t('detail.qrCode') }}</span>
-          <code>{{ asset.qrCodePayload }}</code>
-        </div>
-      </div>
-
-      <h2 class="asset-detail__section-title">{{ t('qr.title') }}</h2>
-      <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" class="asset-detail__qr" />
-
-      <h2 class="asset-detail__section-title">{{ t('detail.workOrders') }}</h2>
-
-      <div class="asset-detail__wo-actions">
-        <button class="btn btn--primary" @click="showWoForm = !showWoForm">
-          {{ showWoForm ? t('assets.cancel') : t('wo.create') }}
-        </button>
-      </div>
-
-      <div v-if="showWoForm" class="asset-detail__wo-form">
-        <WorkOrderCreateForm
-          :asset-id="asset.assetId"
-          @created="onWoCreated"
-          @cancel="showWoForm = false"
-        />
-      </div>
-
-      <p v-if="workOrders.length === 0" class="asset-detail__empty">
-        {{ t('detail.noWorkOrders') }}
-      </p>
-
-      <div v-else class="asset-detail__wo-list">
-        <div v-for="wo in workOrders" :key="wo.workOrderId" class="asset-detail__wo-card">
-          <div class="asset-detail__wo-header">
-            <span :class="['badge', statusClass(wo.status)]">{{ wo.status }}</span>
-            <span class="asset-detail__wo-date">
-              {{ new Date(wo.createdAt).toLocaleDateString(locale) }}
-            </span>
+      <div class="asset-detail__layout">
+        <!-- Left: asset info + work orders -->
+        <div class="asset-detail__main">
+          <div class="asset-detail__card">
+            <div class="asset-detail__row">
+              <span class="asset-detail__label">{{ t('detail.location') }}</span>
+              <span>📍 {{ asset.location }}</span>
+            </div>
+            <div v-if="asset.description" class="asset-detail__row">
+              <span class="asset-detail__label">{{ t('detail.description') }}</span>
+              <span>{{ asset.description }}</span>
+            </div>
+            <div class="asset-detail__row">
+              <span class="asset-detail__label">{{ t('detail.created') }}</span>
+              <span>{{ new Date(asset.createdAt).toLocaleDateString(locale) }}</span>
+            </div>
+            <div class="asset-detail__row">
+              <span class="asset-detail__label">{{ t('detail.qrCode') }}</span>
+              <code>{{ asset.qrCodePayload }}</code>
+            </div>
           </div>
-          <strong class="asset-detail__wo-title">{{ wo.title }}</strong>
-          <div class="asset-detail__wo-meta">
-            <span class="asset-detail__wo-priority">{{ wo.priority }}</span>
-            <span v-if="wo.assignedTechnicianName" class="asset-detail__wo-assignee">
-              {{ t('wo.assignedTo') }}: {{ wo.assignedTechnicianName }}
-            </span>
-            <span v-else class="asset-detail__wo-assignee asset-detail__wo-assignee--none">
-              {{ t('wo.unassigned') }}
-            </span>
-          </div>
-          <button
-            class="btn btn--secondary asset-detail__wo-assign-btn"
-            @click="assigningWoId = assigningWoId === wo.workOrderId ? null : wo.workOrderId"
-          >
-            {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
-          </button>
-          <div v-if="assigningWoId === wo.workOrderId" class="asset-detail__assign-form">
-            <WorkOrderAssignForm
-              :work-order="wo"
-              @assigned="onAssigned"
-              @cancel="assigningWoId = null"
-            />
-          </div>
+
+          <section class="asset-detail__wo-section">
+            <div class="asset-detail__section-header">
+              <h2 class="asset-detail__section-title">{{ t('detail.workOrders') }}</h2>
+              <button class="btn btn--primary" @click="showWoForm = true">
+                {{ t('wo.create') }}
+              </button>
+            </div>
+
+
+            <p v-if="workOrders.length === 0" class="asset-detail__empty">
+              {{ t('detail.noWorkOrders') }}
+            </p>
+
+            <div v-else class="asset-detail__wo-list">
+              <div v-for="wo in workOrders" :key="wo.workOrderId" class="asset-detail__wo-card">
+                <div class="asset-detail__wo-header">
+                  <span :class="['badge', statusClass(wo.status)]">{{ t(`wo.status.${wo.status}`) }}</span>
+                  <span class="asset-detail__wo-date">
+                    {{ new Date(wo.createdAt).toLocaleDateString(locale) }}
+                  </span>
+                </div>
+                <strong class="asset-detail__wo-title">{{ wo.title }}</strong>
+                <div class="asset-detail__wo-meta">
+                  <span :class="['badge', 'badge--priority', priorityClass(wo.priority)]">{{ t(`wo.priority${wo.priority}`) }}</span>
+                  <span v-if="wo.assignedTechnicianName" class="asset-detail__wo-assignee">
+                    {{ t('wo.assignedTo') }}: {{ wo.assignedTechnicianName }}
+                  </span>
+                  <span v-else class="asset-detail__wo-assignee asset-detail__wo-assignee--none">
+                    {{ t('wo.unassigned') }}
+                  </span>
+                </div>
+                <button
+                  class="btn btn--secondary asset-detail__wo-assign-btn"
+                  @click="assigningWoId = assigningWoId === wo.workOrderId ? null : wo.workOrderId"
+                >
+                  {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
+                </button>
+                <div v-if="assigningWoId === wo.workOrderId" class="asset-detail__assign-form">
+                  <WorkOrderAssignForm
+                    :work-order="wo"
+                    @assigned="onAssigned"
+                    @cancel="assigningWoId = null"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right: QR sidebar -->
+        <aside class="asset-detail__sidebar">
+          <h3 class="asset-detail__sidebar-title">{{ t('qr.title') }}</h3>
+          <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" />
+        </aside>
+      </div>
+
+      <!-- WO Create Modal -->
+      <div v-if="showWoForm" class="modal-overlay" @click.self="showWoForm = false">
+        <div class="modal">
+          <WorkOrderCreateForm
+            :asset-id="asset.assetId"
+            @created="onWoCreated"
+            @cancel="showWoForm = false"
+          />
+        </div>
+      </div>
+
+      <!-- Asset Edit Modal -->
+      <div v-if="showEditForm" class="modal-overlay" @click.self="showEditForm = false">
+        <div class="modal">
+          <AssetEditForm
+            :asset="asset"
+            @updated="onAssetSaved"
+            @cancel="showEditForm = false"
+          />
         </div>
       </div>
     </template>
@@ -152,7 +192,7 @@ function statusClass(status: WorkOrderStatus): string {
 <style scoped>
 .asset-detail {
   padding: 32px;
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -177,11 +217,23 @@ function statusClass(status: WorkOrderStatus): string {
   font-weight: 700;
 }
 
+.asset-detail__layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: start;
+}
+
+.asset-detail__main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .asset-detail__card {
   background: #fff;
   border: 1px solid #e5e7eb;
   padding: 20px;
-  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -199,14 +251,31 @@ function statusClass(status: WorkOrderStatus): string {
   min-width: 120px;
 }
 
-.asset-detail__section-title {
-  font-size: 1.25rem;
+.asset-detail__sidebar {
+  position: sticky;
+  top: 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+}
+
+.asset-detail__sidebar-title {
+  font-size: 1rem;
   font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.asset-detail__section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-.asset-detail__qr {
-  margin-bottom: 32px;
+.asset-detail__section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
 }
 
 .asset-detail__empty {
@@ -250,10 +319,6 @@ function statusClass(status: WorkOrderStatus): string {
   color: #6b7280;
 }
 
-.asset-detail__wo-actions {
-  margin-bottom: 16px;
-}
-
 .asset-detail__wo-form {
   margin-bottom: 24px;
   padding: 24px;
@@ -289,5 +354,37 @@ function statusClass(status: WorkOrderStatus): string {
   padding: 16px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
+}
+
+.badge--priority-high   { background: #fee2e2; color: #b91c1c; }
+.badge--priority-medium { background: #fef9c3; color: #a16207; }
+.badge--priority-low    { background: #f3f4f6; color: #6b7280; }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  padding: 32px;
+  min-width: 400px;
+  max-width: 600px;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .asset-detail__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .asset-detail__sidebar {
+    position: static;
+  }
 }
 </style>

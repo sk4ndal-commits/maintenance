@@ -14,8 +14,8 @@
   "detailDescription": "Beschreibung",
   "detailCreated": "Erstellt",
   "detailQrCode": "QR-Code",
-  "detailWorkOrders": "Letzte Work Orders",
-  "detailNoWorkOrders": "Keine Work Orders vorhanden.",
+  "detailWorkOrders": "Letzte Wartungsaufträge",
+  "detailNoWorkOrders": "Keine Wartungsaufträge vorhanden.",
   "detailError": "Fehler",
   "statusOpen": "Offen",
   "statusAssigned": "Zugewiesen",
@@ -28,5 +28,8 @@
   "statusChangeToInProgress": "Starten",
   "statusChangeToDone": "Abschließen",
   "statusChangeError": "Statusänderung fehlgeschlagen: {message}",
-  "@statusChangeError": { "placeholders": { "message": { "type": "String" } } }
+  "@statusChangeError": { "placeholders": { "message": { "type": "String" } } },
+  "priorityLow": "Niedrig",
+  "priorityMedium": "Mittel",
+  "priorityHigh": "Hoch"
 }

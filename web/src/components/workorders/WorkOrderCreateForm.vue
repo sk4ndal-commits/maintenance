@@ -70,7 +70,7 @@ async function submit() {
 
     <div class="wo-form__actions">
       <button type="submit" class="btn btn--primary" :disabled="loading">
-        {{ loading ? t('form.submitting') : t('wo.create') }}
+        {{ loading ? t('form.submitting') : t('wo.submitBtn') }}
       </button>
       <button type="button" class="btn btn--secondary" @click="emit('cancel')">
         {{ t('assets.cancel') }}

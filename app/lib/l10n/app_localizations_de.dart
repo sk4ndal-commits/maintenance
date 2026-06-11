@@ -53,10 +53,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get detailQrCode => 'QR-Code';
 
   @override
-  String get detailWorkOrders => 'Letzte Work Orders';
+  String get detailWorkOrders => 'Letzte Wartungsaufträge';
 
   @override
-  String get detailNoWorkOrders => 'Keine Work Orders vorhanden.';
+  String get detailNoWorkOrders => 'Keine Wartungsaufträge vorhanden.';
 
   @override
   String get detailError => 'Fehler';
@@ -95,4 +95,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String statusChangeError(String message) {
     return 'Statusänderung fehlgeschlagen: $message';
   }
+
+  @override
+  String get priorityLow => 'Niedrig';
+
+  @override
+  String get priorityMedium => 'Mittel';
+
+  @override
+  String get priorityHigh => 'Hoch';
 }

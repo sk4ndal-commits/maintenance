@@ -3,6 +3,7 @@ import '../l10n/app_localizations.dart';
 import '../models/asset.dart';
 import '../models/work_order.dart';
 import '../services/asset_service.dart';
+import '../widgets/work_order_card.dart';
 
 const _primaryColor = Color(0xFF1e3a5f);
 
@@ -156,47 +157,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
               style: const TextStyle(color: Colors.grey),
             ),
           ..._workOrders.map(
-            (wo) => Card(
-              shape: const RoundedRectangleBorder(),
-              margin: const EdgeInsets.only(bottom: 8),
-              elevation: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _StatusBadge(status: wo.status, l10n: l10n),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            wo.title,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF111827)),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            wo.priority.name[0].toUpperCase() + wo.priority.name.substring(1),
-                            style: const TextStyle(
-                                fontSize: 13, color: Color(0xFF6b7280)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      wo.createdAt.length >= 10
-                          ? wo.createdAt.substring(0, 10)
-                          : wo.createdAt,
-                      style:
-                          const TextStyle(fontSize: 11, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            (wo) => WorkOrderCard(workOrder: wo),
           ),
         ],
         ),
@@ -253,46 +214,3 @@ class _TypeBadge extends StatelessWidget {
   }
 }
 
-class _StatusBadge extends StatelessWidget {
-  final WorkOrderStatus status;
-  final AppLocalizations l10n;
-  const _StatusBadge({required this.status, required this.l10n});
-
-  @override
-  Widget build(BuildContext context) {
-    final (label, bgColor, textColor) = switch (status) {
-      WorkOrderStatus.done => (
-          l10n.statusDone,
-          const Color(0xFFdcfce7),
-          const Color(0xFF15803d)
-        ),
-      WorkOrderStatus.inProgress => (
-          l10n.statusInProgress,
-          const Color(0xFFdbeafe),
-          const Color(0xFF1d4ed8)
-        ),
-      WorkOrderStatus.assigned => (
-          l10n.statusAssigned,
-          const Color(0xFFfef9c3),
-          const Color(0xFFa16207)
-        ),
-      WorkOrderStatus.open => (
-          l10n.statusOpen,
-          const Color(0xFFf3f4f6),
-          const Color(0xFF6b7280)
-        ),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      color: bgColor,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}

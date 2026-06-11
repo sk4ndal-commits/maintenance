@@ -64,7 +64,7 @@ function printQr() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .qr-panel__image-wrap {
@@ -92,7 +92,14 @@ function printQr() {
 
 .qr-panel__actions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.qr-panel__actions .btn {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 @media print {

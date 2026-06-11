@@ -56,6 +56,7 @@ export default {
   },
   wo: {
     createTitle: 'Create Work Order',
+    submitBtn: 'Create Work Order',
     title: 'Title',
     priority: 'Priority',
     priorityLow: 'Low',

@@ -93,4 +93,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String statusChangeError(String message) {
     return 'Status change failed: $message';
   }
+
+  @override
+  String get priorityLow => 'Low';
+
+  @override
+  String get priorityMedium => 'Medium';
+
+  @override
+  String get priorityHigh => 'High';
 }

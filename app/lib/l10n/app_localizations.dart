@@ -185,13 +185,13 @@ abstract class AppLocalizations {
   /// No description provided for @detailWorkOrders.
   ///
   /// In de, this message translates to:
-  /// **'Letzte Work Orders'**
+  /// **'Letzte Wartungsaufträge'**
   String get detailWorkOrders;
 
   /// No description provided for @detailNoWorkOrders.
   ///
   /// In de, this message translates to:
-  /// **'Keine Work Orders vorhanden.'**
+  /// **'Keine Wartungsaufträge vorhanden.'**
   String get detailNoWorkOrders;
 
   /// No description provided for @detailError.
@@ -265,6 +265,24 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Statusänderung fehlgeschlagen: {message}'**
   String statusChangeError(String message);
+
+  /// No description provided for @priorityLow.
+  ///
+  /// In de, this message translates to:
+  /// **'Niedrig'**
+  String get priorityLow;
+
+  /// No description provided for @priorityMedium.
+  ///
+  /// In de, this message translates to:
+  /// **'Mittel'**
+  String get priorityMedium;
+
+  /// No description provided for @priorityHigh.
+  ///
+  /// In de, this message translates to:
+  /// **'Hoch'**
+  String get priorityHigh;
 }
 
 class _AppLocalizationsDelegate
