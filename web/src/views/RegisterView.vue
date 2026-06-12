@@ -2,9 +2,21 @@
   <div class="login-page">
     <div class="login-card">
       <h1 class="login-title">Maintenance System</h1>
-      <p class="login-subtitle">Bitte melden Sie sich an</p>
+      <p class="login-subtitle">Neues Konto erstellen</p>
 
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handleRegister" class="login-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            id="name"
+            v-model="name"
+            type="text"
+            placeholder="Vor- und Nachname"
+            required
+            autocomplete="name"
+          />
+        </div>
+
         <div class="form-group">
           <label for="email">E-Mail</label>
           <input
@@ -25,20 +37,22 @@
             type="password"
             placeholder="••••••••"
             required
-            autocomplete="current-password"
+            autocomplete="new-password"
+            minlength="6"
           />
         </div>
 
         <p v-if="error" class="error-message">{{ error }}</p>
+        <p v-if="success" class="success-message">{{ success }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Anmelden...' : 'Anmelden' }}
+          {{ loading ? 'Registrieren...' : 'Registrieren' }}
         </button>
       </form>
 
       <p class="login-link">
-        Noch kein Konto?
-        <RouterLink to="/register">Registrieren</RouterLink>
+        Bereits ein Konto?
+        <RouterLink to="/login">Anmelden</RouterLink>
       </p>
     </div>
   </div>
@@ -50,20 +64,23 @@ import { useRouter } from 'vue-router'
 import { userApi } from '../api/userApi'
 
 const router = useRouter()
+const name = ref('')
 const email = ref('')
 const password = ref('')
 const error = ref('')
+const success = ref('')
 const loading = ref(false)
 
-async function handleLogin() {
+async function handleRegister() {
   error.value = ''
+  success.value = ''
   loading.value = true
   try {
-    const { token } = await userApi.login(email.value, password.value)
-    localStorage.setItem('jwt', token)
-    router.push('/assets')
+    await userApi.register(name.value, email.value, password.value)
+    success.value = 'Konto erfolgreich erstellt. Sie werden weitergeleitet…'
+    setTimeout(() => router.push('/login'), 1500)
   } catch {
-    error.value = 'Ungültige Anmeldedaten oder Konto deaktiviert.'
+    error.value = 'Registrierung fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.'
   } finally {
     loading.value = false
   }
@@ -128,6 +145,12 @@ async function handleLogin() {
 
 .error-message {
   color: #dc2626;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.success-message {
+  color: #16a34a;
   font-size: 0.875rem;
   margin: 0;
 }
