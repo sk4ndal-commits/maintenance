@@ -53,11 +53,6 @@ function onCreated(asset: Asset) {
   loadAssets()
 }
 
-function onEdit(asset: Asset) {
-  editingAsset.value = asset
-  showForm.value = false
-  createdAsset.value = null
-}
 
 function onUpdated(asset: Asset) {
   editingAsset.value = null
@@ -109,8 +104,6 @@ onMounted(loadAssets)
         v-for="asset in assets"
         :key="asset.assetId"
         :asset="asset"
-        :can-edit="canEdit"
-        @edit="onEdit"
       />
       <p v-if="assets.length === 0" class="assets-view__empty">{{ t('assets.empty') }}</p>
     </div>

@@ -5,8 +5,7 @@ import type { Asset } from '../../types/asset'
 
 const { t, locale } = useI18n()
 const router = useRouter()
-const props = defineProps<{ asset: Asset; canEdit?: boolean }>()
-const emit = defineEmits<{ (e: 'edit', asset: Asset): void }>()
+const props = defineProps<{ asset: Asset }>()
 </script>
 
 <template>
@@ -19,9 +18,6 @@ const emit = defineEmits<{ (e: 'edit', asset: Asset): void }>()
     <p class="asset-card__location">📍 {{ asset.location }}</p>
     <p v-if="asset.description" class="asset-card__description">{{ asset.description }}</p>
     <code class="asset-card__qr">{{ t('card.qrCode') }}: {{ asset.qrCodePayload }}</code>
-    <div v-if="canEdit" class="asset-card__actions" @click.stop>
-      <button class="btn btn--secondary btn--sm" @click="emit('edit', asset)">{{ t('card.edit') }}</button>
-    </div>
   </div>
 </template>
 

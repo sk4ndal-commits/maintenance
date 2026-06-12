@@ -84,6 +84,19 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
+
+    var repo = scope.ServiceProvider.GetRequiredService<ITechnicianRepository>();
+    var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    var existing = await repo.GetByEmailAsync("admin@maintenance.local");
+    if (existing is null)
+    {
+        var admin = MaintenanceSystem.Domain.Entities.Technician.Create(
+            "Admin",
+            "admin@maintenance.local",
+            hasher.Hash("Admin1234!"),
+            "Admin");
+        await repo.AddAsync(admin);
+    }
 }
 
 if (app.Environment.IsDevelopment())

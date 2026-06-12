@@ -21,8 +21,12 @@ export interface HistoryResponse {
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000'
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('jwt')
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     ...options,
   })
   if (!res.ok) {
@@ -60,7 +64,10 @@ export const assetApi = {
   },
 
   async downloadQrCode(id: string): Promise<string> {
-    const res = await fetch(`${BASE_URL}/api/assets/${id}/qr-code`)
+    const token = localStorage.getItem('jwt')
+    const res = await fetch(`${BASE_URL}/api/assets/${id}/qr-code`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
     if (!res.ok) throw new Error(`QR error ${res.status}`)
     const blob = await res.blob()
     return URL.createObjectURL(blob)
