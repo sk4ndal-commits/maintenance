@@ -10,7 +10,8 @@ const _primaryColor = Color(0xFF1e3a5f);
 
 class MyTasksScreen extends StatefulWidget {
   final String? token;
-  const MyTasksScreen({super.key, this.token});
+  final String? userId;
+  const MyTasksScreen({super.key, this.token, this.userId});
 
   @override
   State<MyTasksScreen> createState() => _MyTasksScreenState();
@@ -33,7 +34,9 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
   Future<void> _load() async {
     setState(() { _loading = true; _error = null; });
     try {
-      final result = await _service.getAll();
+      final result = widget.userId != null && widget.userId!.isNotEmpty
+          ? await _service.getByTechnician(widget.userId!)
+          : await _service.getAll();
       setState(() { _allWorkOrders = result; _loading = false; });
       _applyFilter();
     } catch (e) {
@@ -115,6 +118,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
                 final wo = _workOrders[i];
                 return WorkOrderCard(
                   workOrder: wo,
+                  token: widget.token,
                   onAssetTap: () => Navigator.push(
                     ctx,
                     MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: wo.assetId, token: widget.token)),

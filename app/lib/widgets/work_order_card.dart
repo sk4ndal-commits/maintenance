@@ -8,12 +8,14 @@ class WorkOrderCard extends StatefulWidget {
   final WorkOrder workOrder;
   final Future<void> Function(WorkOrderStatus)? onTransition;
   final VoidCallback? onAssetTap;
+  final String? token;
 
   const WorkOrderCard({
     super.key,
     required this.workOrder,
     this.onTransition,
     this.onAssetTap,
+    this.token,
   });
 
   @override
@@ -46,6 +48,7 @@ class _WorkOrderCardState extends State<WorkOrderCard> {
                   MaterialPageRoute(
                     builder: (_) => ChecklistWizardScreen(
                       workOrder: wo,
+                      token: widget.token,
                       onWorkOrderUpdated: (updated) {
                         widget.onTransition!(updated.status);
                       },

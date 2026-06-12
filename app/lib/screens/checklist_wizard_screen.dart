@@ -172,9 +172,10 @@ class _ChecklistWizardScreenState extends State<ChecklistWizardScreen> {
           child: LinearProgressIndicator(value: progress),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -263,7 +264,9 @@ class _ChecklistWizardScreenState extends State<ChecklistWizardScreen> {
                 const Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1e3a5f),
+                    backgroundColor: _currentIndex < _steps.length - 1
+                        ? const Color(0xFF1e3a5f)
+                        : const Color(0xFF15803d),
                     foregroundColor: Colors.white,
                     minimumSize: const Size(140, 48),
                   ),
@@ -278,6 +281,7 @@ class _ChecklistWizardScreenState extends State<ChecklistWizardScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

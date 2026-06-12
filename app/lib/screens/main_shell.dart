@@ -25,7 +25,7 @@ class _MainShellState extends State<MainShell> {
       QrScanScreen(token: token),
     ];
     if (widget.auth.isPlanner || widget.auth.isTechnician) {
-      screens.add(MyTasksScreen(token: token));
+      screens.add(MyTasksScreen(token: token, userId: widget.auth.userId));
     }
     return screens;
   }

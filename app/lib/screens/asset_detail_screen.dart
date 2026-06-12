@@ -179,6 +179,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           ..._workOrders.map(
             (wo) => WorkOrderCard(
               workOrder: wo,
+              token: widget.token,
               onTransition: (newStatus) async {
                 try {
                   final statusStr = switch (newStatus) {
