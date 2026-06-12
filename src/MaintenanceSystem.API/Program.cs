@@ -1,11 +1,15 @@
 using MaintenanceSystem.Application.Assets.Commands;
 using MaintenanceSystem.Application.Assets.Queries;
 using MaintenanceSystem.Application.WorkOrders.Commands;
+using MaintenanceSystem.Application.Users.Commands;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Infrastructure.Persistence;
 using MaintenanceSystem.Infrastructure.Services;
 using MaintenanceSystem.Infrastructure.Storage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +41,28 @@ builder.Services.AddScoped<IMaintenanceDocumentRepository, MaintenanceDocumentRe
 builder.Services.AddScoped<UploadMaintenanceDocumentHandler>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<GetAssetHistoryHandler>();
+builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<CreateUserHandler>();
+builder.Services.AddScoped<UpdateUserHandler>();
+builder.Services.AddScoped<SetUserActiveHandler>();
+builder.Services.AddScoped<LoginHandler>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
+        };
+    });
 
 builder.Services.AddCors(options =>
 {
@@ -61,6 +87,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("VueFrontend");
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

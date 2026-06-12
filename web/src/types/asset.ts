@@ -33,6 +33,27 @@ export interface Technician {
   email: string
 }
 
+export interface User {
+  technicianId: string
+  name: string
+  email: string
+  role: string
+  isActive: boolean
+}
+
+export interface CreateUserPayload {
+  name: string
+  email: string
+  password: string
+  role: string
+}
+
+export interface UpdateUserPayload {
+  name: string
+  email: string
+  role: string
+}
+
 export interface AssignWorkOrderPayload {
   workOrderId: string
   technicianId: string

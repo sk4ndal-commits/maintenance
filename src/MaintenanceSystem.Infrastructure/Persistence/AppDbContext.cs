@@ -47,6 +47,9 @@ public class AppDbContext : DbContext
             e.HasKey(t => t.TechnicianId);
             e.Property(t => t.Name).IsRequired().HasMaxLength(200);
             e.Property(t => t.Email).IsRequired().HasMaxLength(200);
+            e.Property(t => t.PasswordHash).IsRequired().HasMaxLength(500);
+            e.Property(t => t.Role).IsRequired().HasMaxLength(50);
+            e.HasIndex(t => t.Email).IsUnique();
         });
 
         modelBuilder.Entity<AssignmentHistory>(e =>

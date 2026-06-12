@@ -79,6 +79,12 @@ export default {
     checklistEmpty: 'Keine Checklistenpunkte.',
     checklistStep: 'Schrittbeschreibung',
     checklistRequiresPhoto: 'Foto erforderlich',
+    status: {
+      Open: 'Offen',
+      Assigned: 'Zugewiesen',
+      InProgress: 'In Bearbeitung',
+      Done: 'Abgeschlossen',
+    },
   },
   history: {
     title: 'Wartungshistorie',
@@ -94,14 +100,6 @@ export default {
       ChecklistStepCompleted: 'Checklistenpunkt',
       DocumentUploaded: 'Dokument hochgeladen',
       StatusChanged: 'Status ge\u00e4ndert',
-    },
-  },
-  wo: {
-    status: {
-      Open: 'Offen',
-      Assigned: 'Zugewiesen',
-      InProgress: 'In Bearbeitung',
-      Done: 'Abgeschlossen',
     },
   },
   card: {

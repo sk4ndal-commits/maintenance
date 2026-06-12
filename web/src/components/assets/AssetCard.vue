@@ -6,7 +6,7 @@ import type { Asset } from '../../types/asset'
 const { t, locale } = useI18n()
 const router = useRouter()
 const props = defineProps<{ asset: Asset }>()
-const emit = defineEmits<{ (e: 'edit', asset: Asset): void }>()
+defineEmits<{ (e: 'edit', asset: Asset): void }>()
 </script>
 
 <template>
