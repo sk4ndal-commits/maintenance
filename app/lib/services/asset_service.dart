@@ -7,9 +7,18 @@ import '../models/work_order.dart';
 class AssetService {
   static const String _base = 'http://localhost:5000';
 
+  final String? token;
+  AssetService({this.token});
+
+  Map<String, String> get _headers => {
+    'Content-Type': 'application/json',
+    if (token != null) 'Authorization': 'Bearer $token',
+  };
+
   Future<List<Asset>> getAll({int page = 1, int pageSize = 20}) async {
     final res = await http.get(
       Uri.parse('$_base/api/assets?page=$page&pageSize=$pageSize'),
+      headers: _headers,
     );
     if (res.statusCode != 200) {
       throw Exception('Failed to load assets: ${res.statusCode}');
@@ -21,7 +30,7 @@ class AssetService {
   }
 
   Future<Asset> getById(String id) async {
-    final res = await http.get(Uri.parse('$_base/api/assets/$id'));
+    final res = await http.get(Uri.parse('$_base/api/assets/$id'), headers: _headers);
     if (res.statusCode != 200) {
       throw Exception('Failed to load asset: ${res.statusCode}');
     }
@@ -35,7 +44,7 @@ class AssetService {
     if (eventType != null && eventType.isNotEmpty) params['eventType'] = eventType;
     final uri = Uri.parse('$_base/api/assets/$assetId/history')
         .replace(queryParameters: params);
-    final res = await http.get(uri);
+    final res = await http.get(uri, headers: _headers);
     if (res.statusCode != 200) throw Exception('API error ${res.statusCode}');
     final body = jsonDecode(res.body) as Map<String, dynamic>;
     return (body['data'] as List)
@@ -46,6 +55,7 @@ class AssetService {
   Future<List<WorkOrder>> getWorkOrders(String id, {int limit = 10}) async {
     final res = await http.get(
       Uri.parse('$_base/api/assets/$id/work-orders?limit=$limit'),
+      headers: _headers,
     );
     if (res.statusCode != 200) {
       throw Exception('Failed to load work orders: ${res.statusCode}');

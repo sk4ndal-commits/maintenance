@@ -7,14 +7,15 @@ import 'asset_detail_screen.dart';
 const _primaryColor = Color(0xFF1e3a5f);
 
 class AssetListScreen extends StatefulWidget {
-  const AssetListScreen({super.key});
+  final String? token;
+  const AssetListScreen({super.key, this.token});
 
   @override
   State<AssetListScreen> createState() => _AssetListScreenState();
 }
 
 class _AssetListScreenState extends State<AssetListScreen> {
-  final _service = AssetService();
+  late final _service = AssetService(token: widget.token);
   List<Asset> _assets = [];
   bool _loading = true;
   String? _error;
@@ -110,7 +111,7 @@ class _AssetListScreenState extends State<AssetListScreen> {
                                 ctx,
                                 MaterialPageRoute(
                                   builder: (_) =>
-                                      AssetDetailScreen(assetId: a.assetId),
+                                      AssetDetailScreen(assetId: a.assetId, token: widget.token),
                                 ),
                               ),
                             );

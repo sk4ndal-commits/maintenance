@@ -7,7 +7,8 @@ import 'asset_detail_screen.dart';
 const _primaryColor = Color(0xFF1e3a5f);
 
 class QrScanScreen extends StatefulWidget {
-  const QrScanScreen({super.key});
+  final String? token;
+  const QrScanScreen({super.key, this.token});
 
   @override
   State<QrScanScreen> createState() => _QrScanScreenState();
@@ -39,12 +40,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
     await _controller.stop();
 
     try {
-      final asset = await AssetService().getById(assetId);
+      final asset = await AssetService(token: widget.token).getById(assetId);
       if (!mounted) return;
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => AssetDetailScreen(assetId: asset.assetId),
+          builder: (_) => AssetDetailScreen(assetId: asset.assetId, token: widget.token),
         ),
       );
     } catch (_) {

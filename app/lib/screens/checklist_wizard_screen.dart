@@ -10,11 +10,13 @@ import '../widgets/work_order_completion_form.dart';
 class ChecklistWizardScreen extends StatefulWidget {
   final WorkOrder workOrder;
   final void Function(WorkOrder updated)? onWorkOrderUpdated;
+  final String? token;
 
   const ChecklistWizardScreen({
     super.key,
     required this.workOrder,
     this.onWorkOrderUpdated,
+    this.token,
   });
 
   @override
@@ -26,7 +28,7 @@ class _ChecklistWizardScreenState extends State<ChecklistWizardScreen> {
   int _currentIndex = 0;
   bool _loading = true;
   File? _capturedPhoto;
-  final _service = WorkOrderService();
+  late final _service = WorkOrderService(token: widget.token);
   late WorkOrder _workOrder;
 
   @override

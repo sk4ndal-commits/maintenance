@@ -6,11 +6,13 @@ import '../services/asset_service.dart';
 class AssetHistoryScreen extends StatefulWidget {
   final String assetId;
   final String assetName;
+  final String? token;
 
   const AssetHistoryScreen({
     super.key,
     required this.assetId,
     required this.assetName,
+    this.token,
   });
 
   @override
@@ -47,7 +49,7 @@ class _AssetHistoryScreenState extends State<AssetHistoryScreen> {
   Future<void> _load() async {
     setState(() => _loading = true);
     try {
-      final events = await AssetService().getHistory(
+      final events = await AssetService(token: widget.token).getHistory(
         widget.assetId,
         search: _searchController.text.trim().isEmpty
             ? null

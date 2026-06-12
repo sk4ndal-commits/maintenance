@@ -19,12 +19,13 @@ class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
 
   List<Widget> _screens() {
+    final token = widget.auth.token;
     final screens = <Widget>[
-      const AssetListScreen(),
-      const QrScanScreen(),
+      AssetListScreen(token: token),
+      QrScanScreen(token: token),
     ];
     if (widget.auth.isPlanner || widget.auth.isTechnician) {
-      screens.add(const MyTasksScreen());
+      screens.add(MyTasksScreen(token: token));
     }
     return screens;
   }

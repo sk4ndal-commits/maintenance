@@ -9,14 +9,15 @@ import 'asset_detail_screen.dart';
 const _primaryColor = Color(0xFF1e3a5f);
 
 class MyTasksScreen extends StatefulWidget {
-  const MyTasksScreen({super.key});
+  final String? token;
+  const MyTasksScreen({super.key, this.token});
 
   @override
   State<MyTasksScreen> createState() => _MyTasksScreenState();
 }
 
 class _MyTasksScreenState extends State<MyTasksScreen> {
-  final _service = WorkOrderService();
+  late final _service = WorkOrderService(token: widget.token);
   List<WorkOrder> _allWorkOrders = [];
   List<WorkOrder> _workOrders = [];
   WorkOrderStatus? _filterStatus;
@@ -116,7 +117,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
                   workOrder: wo,
                   onAssetTap: () => Navigator.push(
                     ctx,
-                    MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: wo.assetId)),
+                    MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: wo.assetId, token: widget.token)),
                   ),
                   onTransition: (newStatus) async {
                     try {

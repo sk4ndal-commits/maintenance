@@ -11,14 +11,15 @@ const _primaryColor = Color(0xFF1e3a5f);
 
 class AssetDetailScreen extends StatefulWidget {
   final String assetId;
-  const AssetDetailScreen({super.key, required this.assetId});
+  final String? token;
+  const AssetDetailScreen({super.key, required this.assetId, this.token});
 
   @override
   State<AssetDetailScreen> createState() => _AssetDetailScreenState();
 }
 
 class _AssetDetailScreenState extends State<AssetDetailScreen> {
-  final _service = AssetService();
+  late final _service = AssetService(token: widget.token);
   Asset? _asset;
   List<WorkOrder> _workOrders = [];
   bool _loading = true;
@@ -119,6 +120,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                 builder: (_) => AssetHistoryScreen(
                   assetId: asset.assetId,
                   assetName: asset.name,
+                  token: widget.token,
                 ),
               ),
             ),
@@ -185,7 +187,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                     WorkOrderStatus.assigned => 'Assigned',
                     WorkOrderStatus.open => 'Open',
                   };
-                  final updated = await WorkOrderService().changeStatus(
+                  final updated = await WorkOrderService(token: widget.token).changeStatus(
                     wo.workOrderId,
                     statusStr,
                   );
