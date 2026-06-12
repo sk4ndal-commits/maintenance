@@ -1,12 +1,16 @@
+using System.Security.Claims;
+using MaintenanceSystem.Application.Common;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Application.WorkOrders.Commands;
 using MaintenanceSystem.Application.WorkOrders.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaintenanceSystem.API.Controllers;
 
 [ApiController]
 [Route("api/work-orders")]
+[Authorize]
 public class WorkOrdersController : ControllerBase
 {
     private readonly CreateWorkOrderHandler _createHandler;
@@ -51,6 +55,7 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Planner}")]
     public async Task<IActionResult> Create([FromBody] CreateWorkOrderCommand cmd)
     {
         try
@@ -83,6 +88,7 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpPut("{id:guid}/assign")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Planner}")]
     public async Task<IActionResult> Assign(Guid id, [FromBody] AssignWorkOrderCommand cmd)
     {
         if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
@@ -101,6 +107,14 @@ public class WorkOrdersController : ControllerBase
     public async Task<IActionResult> ChangeStatus(Guid id, [FromBody] ChangeWorkOrderStatusCommand cmd)
     {
         if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });
+        var role = User.FindFirstValue(ClaimTypes.Role);
+        if (role == Roles.Technician)
+        {
+            var techIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!Guid.TryParse(techIdStr, out var techId)) return Forbid();
+            var wo = await _repo.GetByIdAsync(id);
+            if (wo?.AssignedTechnicianId != techId) return Forbid();
+        }
         try
         {
             var dto = await _statusHandler.Handle(cmd);
@@ -131,6 +145,7 @@ public class WorkOrdersController : ControllerBase
     }
 
     [HttpPost("{id:guid}/checklist")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Planner}")]
     public async Task<IActionResult> AddStep(Guid id, [FromBody] AddChecklistStepCommand cmd)
     {
         if (id != cmd.WorkOrderId) return BadRequest(new { message = "ID mismatch" });

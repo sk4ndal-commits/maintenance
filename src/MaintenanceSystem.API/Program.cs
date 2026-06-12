@@ -3,6 +3,7 @@ using MaintenanceSystem.Application.Assets.Queries;
 using MaintenanceSystem.Application.WorkOrders.Commands;
 using MaintenanceSystem.Application.Users.Commands;
 using MaintenanceSystem.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using MaintenanceSystem.Infrastructure.Persistence;
 using MaintenanceSystem.Infrastructure.Services;
 using MaintenanceSystem.Infrastructure.Storage;
@@ -47,6 +48,11 @@ builder.Services.AddScoped<CreateUserHandler>();
 builder.Services.AddScoped<UpdateUserHandler>();
 builder.Services.AddScoped<SetUserActiveHandler>();
 builder.Services.AddScoped<LoginHandler>();
+
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

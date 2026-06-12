@@ -28,27 +28,30 @@ const router = createRouter({
       path: '/assets',
       name: 'assets',
       component: AssetsView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/assets/:id',
       name: 'asset-detail',
       component: () => import('../views/AssetDetailView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/users',
       name: 'users',
       component: () => import('../views/UsersView.vue'),
-      meta: { requiresAdmin: true },
+      meta: { requiresAuth: true, requiresRole: ['Admin'] },
     },
   ],
 })
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAdmin) {
-    const role = getTokenRole()
-    if (role !== 'Admin') {
-      return { name: 'login' }
-    }
+  const role = getTokenRole()
+  if (to.meta.requiresAuth && !role) {
+    return { name: 'login' }
+  }
+  if (to.meta.requiresRole && !(to.meta.requiresRole as string[]).includes(role!)) {
+    return { name: 'assets' }
   }
 })
 

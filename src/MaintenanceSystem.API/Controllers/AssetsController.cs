@@ -1,15 +1,18 @@
 using MaintenanceSystem.Application.Assets.Commands;
 using MaintenanceSystem.Application.Assets.DTOs;
 using MaintenanceSystem.Application.Assets.Queries;
+using MaintenanceSystem.Application.Common;
 using MaintenanceSystem.Application.Common.Interfaces;
 using MaintenanceSystem.Application.WorkOrders.DTOs;
 using MaintenanceSystem.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaintenanceSystem.API.Controllers;
 
 [ApiController]
 [Route("api/assets")]
+[Authorize]
 public class AssetsController : ControllerBase
 {
     private readonly CreateAssetHandler _createHandler;
@@ -30,6 +33,7 @@ public class AssetsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Planner}")]
     public async Task<IActionResult> Create([FromBody] CreateAssetCommand cmd)
     {
         var dto = await _createHandler.Handle(cmd);
@@ -58,6 +62,7 @@ public class AssetsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Planner}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAssetCommand cmd)
     {
         if (id != cmd.AssetId) return BadRequest("ID mismatch");
@@ -100,6 +105,7 @@ public class AssetsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var asset = await _repo.GetByIdAsync(id);

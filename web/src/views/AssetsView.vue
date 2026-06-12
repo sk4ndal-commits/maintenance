@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { assetApi } from '../api/assetApi'
 import type { Asset } from '../types/asset'
@@ -8,6 +8,20 @@ import AssetEditForm from '../components/assets/AssetEditForm.vue'
 import AssetCard from '../components/assets/AssetCard.vue'
 
 const { t } = useI18n()
+
+function getTokenRole(): string | null {
+  const token = localStorage.getItem('jwt')
+  if (!token) return null
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? null
+  } catch {
+    return null
+  }
+}
+
+const role = computed(() => getTokenRole())
+const canEdit = computed(() => role.value === 'Admin' || role.value === 'Planner')
 
 const assets = ref<Asset[]>([])
 const total = ref(0)
@@ -65,7 +79,7 @@ onMounted(loadAssets)
   <div class="assets-view">
     <div class="assets-view__header">
       <h1>{{ t('assets.title') }}</h1>
-      <button class="btn btn--primary" @click="showForm = true">
+      <button v-if="canEdit" class="btn btn--primary" @click="showForm = true">
         {{ t('assets.create') }}
       </button>
     </div>
@@ -95,6 +109,7 @@ onMounted(loadAssets)
         v-for="asset in assets"
         :key="asset.assetId"
         :asset="asset"
+        :can-edit="canEdit"
         @edit="onEdit"
       />
       <p v-if="assets.length === 0" class="assets-view__empty">{{ t('assets.empty') }}</p>
