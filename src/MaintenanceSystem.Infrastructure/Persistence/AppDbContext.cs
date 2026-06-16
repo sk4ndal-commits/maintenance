@@ -39,6 +39,7 @@ public class AppDbContext : DbContext
         {
             e.HasKey(a => a.Id);
             e.Property(a => a.Action).IsRequired().HasMaxLength(200);
+            e.Property(a => a.UserId).HasMaxLength(100);
             e.Property(a => a.Details).HasMaxLength(1000);
         });
 

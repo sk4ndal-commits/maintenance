@@ -105,6 +105,10 @@ namespace MaintenanceSystem.Infrastructure.Migrations
                     b.Property<Guid>("EntityId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("AuditLogs");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_order.dart';
+import '../services/task_notification_service.dart';
 import '../services/work_order_service.dart';
 import '../widgets/status_transition_button.dart';
 import '../widgets/work_order_card.dart';
@@ -38,6 +39,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
           ? await _service.getByTechnician(widget.userId!)
           : await _service.getAll();
       setState(() { _allWorkOrders = result; _loading = false; });
+      TaskNotificationService.updateTaskCount(result.where((wo) => wo.status == WorkOrderStatus.assigned).length);
       _applyFilter();
     } catch (e) {
       setState(() { _error = e.toString(); _loading = false; });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_provider.dart';
+import '../services/task_notification_service.dart';
 import 'asset_list_screen.dart';
 import 'my_tasks_screen.dart';
 import 'qr_scan_screen.dart';
@@ -45,7 +46,17 @@ class _MainShellState extends State<MainShell> {
     ];
     if (widget.auth.isPlanner || widget.auth.isTechnician) {
       items.add(BottomNavigationBarItem(
-        icon: const Icon(Icons.assignment_outlined),
+        icon: ValueListenableBuilder<int>(
+          valueListenable: TaskNotificationService.openTaskCount,
+          builder: (context, count, child) {
+            return Badge(
+              isLabelVisible: count > 0,
+              label: Text('$count'),
+              child: child,
+            );
+          },
+          child: const Icon(Icons.assignment_outlined),
+        ),
         activeIcon: const Icon(Icons.assignment),
         label: l10n.navMyTasks,
       ));

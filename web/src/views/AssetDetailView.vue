@@ -10,6 +10,9 @@ import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vu
 import WorkOrderChecklistForm from '../components/workorders/WorkOrderChecklistForm.vue'
 import AssetEditForm from '../components/assets/AssetEditForm.vue'
 import AssetHistoryTimeline from '../components/assets/AssetHistoryTimeline.vue'
+import AuditLogTable from '../components/common/AuditLogTable.vue'
+import { auditApi } from '../api/auditApi'
+import type { AuditLog } from '../types/audit'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -22,6 +25,7 @@ const error = ref<string | null>(null)
 const showWoForm = ref(false)
 const showEditForm = ref(false)
 const assigningWoId = ref<string | null>(null)
+const auditLogs = ref<AuditLog[]>([])
 
 onMounted(async () => {
   loading.value = true
@@ -29,6 +33,7 @@ onMounted(async () => {
     const id = route.params.id as string
     asset.value = await assetApi.getById(id)
     workOrders.value = await assetApi.getWorkOrders(id)
+    auditLogs.value = await auditApi.getByEntity(id)
   } catch (e: unknown) {
     error.value = e instanceof Error ? e.message : t('assets.errorLoading')
   } finally {
@@ -91,6 +96,10 @@ function statusClass(status: WorkOrderStatus): string {
       <div class="asset-detail__layout">
         <!-- Left: asset info + work orders -->
         <div class="asset-detail__main">
+          <div class="asset-detail__card">
+            <h2 class="asset-detail__section-title">Audit Logs</h2>
+            <AuditLogTable :logs="auditLogs" />
+          </div>
           <div class="asset-detail__card">
             <div class="asset-detail__row">
               <span class="asset-detail__label">{{ t('detail.location') }}</span>
