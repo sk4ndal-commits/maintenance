@@ -50,6 +50,8 @@ builder.Services.AddScoped<CreateUserHandler>();
 builder.Services.AddScoped<UpdateUserHandler>();
 builder.Services.AddScoped<SetUserActiveHandler>();
 builder.Services.AddScoped<LoginHandler>();
+builder.Services.AddScoped<PasswordResetService>();
+builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
 builder.Services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()

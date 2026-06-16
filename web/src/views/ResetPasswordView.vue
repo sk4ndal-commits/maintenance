@@ -1,73 +1,55 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">Maintenance System</h1>
-      <p class="login-subtitle">Bitte melden Sie sich an</p>
+      <h1 class="login-title">Neues Passwort</h1>
+      <p class="login-subtitle">Geben Sie ein neues Passwort für Ihr Konto ein.</p>
 
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handleResetPassword" class="login-form">
         <div class="form-group">
-          <label for="email">E-Mail</label>
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            placeholder="name@example.com"
-            required
-            autocomplete="email"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="password">Passwort</label>
+          <label for="password">Neues Passwort</label>
           <input
             id="password"
-            v-model="password"
+            v-model="newPassword"
             type="password"
             placeholder="••••••••"
             required
-            autocomplete="current-password"
           />
         </div>
 
         <p v-if="error" class="error-message">{{ error }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Anmelden...' : 'Anmelden' }}
+          {{ loading ? 'Speichern...' : 'Passwort speichern' }}
         </button>
       </form>
-
-      <p class="login-link">
-        <RouterLink to="/forgot-password">Passwort vergessen?</RouterLink>
-      </p>
-
-      <p class="login-link">
-        Noch kein Konto?
-        <RouterLink to="/register">Registrieren</RouterLink>
-      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { userApi } from '../api/userApi'
+import { useRoute, useRouter } from 'vue-router'
+import { apiClient } from '../api/apiClient'
 
+const route = useRoute()
 const router = useRouter()
-const email = ref('')
-const password = ref('')
+const token = route.query.token as string
+const newPassword = ref('')
 const error = ref('')
 const loading = ref(false)
 
-async function handleLogin() {
+async function handleResetPassword() {
+  if (!token) {
+    error.value = 'Ungültiger Reset-Token.'
+    return
+  }
   error.value = ''
   loading.value = true
   try {
-    const { token } = await userApi.login(email.value, password.value)
-    localStorage.setItem('jwt', token)
-    router.push('/assets')
+    await apiClient.post('/auth/reset-password', { token, newPassword: newPassword.value })
+    router.push('/login')
   } catch {
-    error.value = 'Ungültige Anmeldedaten oder Konto deaktiviert.'
+    error.value = 'Fehler beim Zurücksetzen des Passworts. Möglicherweise ist das Token abgelaufen.'
   } finally {
     loading.value = false
   }
@@ -155,22 +137,5 @@ async function handleLogin() {
 .btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.login-link {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.login-link a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
 }
 </style>

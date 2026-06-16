@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
 
     [HttpPatch("{id:guid}/password")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordRequest req, [FromServices] ResetPasswordHandler handler)
+    public async Task<IActionResult> ResetPassword(Guid id, [FromBody] AdminResetPasswordRequest req, [FromServices] ResetPasswordHandler handler)
     {
         await handler.HandleAsync(id, req.NewPassword);
         return NoContent();
@@ -74,4 +74,4 @@ public class UsersController : ControllerBase
 public record RegisterRequest(string Name, string Email, string Password);
 public record LoginRequest(string Email, string Password);
 public record SetActiveRequest(bool IsActive);
-public record ResetPasswordRequest(string NewPassword);
+public record AdminResetPasswordRequest(string NewPassword);

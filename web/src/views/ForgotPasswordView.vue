@@ -1,10 +1,10 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">Maintenance System</h1>
-      <p class="login-subtitle">Bitte melden Sie sich an</p>
+      <h1 class="login-title">Passwort vergessen</h1>
+      <p class="login-subtitle">Geben Sie Ihre E-Mail-Adresse ein, um einen Reset-Link zu erhalten.</p>
 
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handleForgotPassword" class="login-form">
         <div class="form-group">
           <label for="email">E-Mail</label>
           <input
@@ -17,32 +17,16 @@
           />
         </div>
 
-        <div class="form-group">
-          <label for="password">Passwort</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            autocomplete="current-password"
-          />
-        </div>
-
+        <p v-if="message" class="info-message">{{ message }}</p>
         <p v-if="error" class="error-message">{{ error }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Anmelden...' : 'Anmelden' }}
+          {{ loading ? 'Senden...' : 'Reset-Link senden' }}
         </button>
       </form>
 
       <p class="login-link">
-        <RouterLink to="/forgot-password">Passwort vergessen?</RouterLink>
-      </p>
-
-      <p class="login-link">
-        Noch kein Konto?
-        <RouterLink to="/register">Registrieren</RouterLink>
+        <RouterLink to="/login">Zurück zum Login</RouterLink>
       </p>
     </div>
   </div>
@@ -50,24 +34,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { userApi } from '../api/userApi'
+import { apiClient } from '../api/apiClient'
 
-const router = useRouter()
 const email = ref('')
-const password = ref('')
+const message = ref('')
 const error = ref('')
 const loading = ref(false)
 
-async function handleLogin() {
+async function handleForgotPassword() {
   error.value = ''
+  message.value = ''
   loading.value = true
   try {
-    const { token } = await userApi.login(email.value, password.value)
-    localStorage.setItem('jwt', token)
-    router.push('/assets')
+    // Calling API directly since auth is separate and doesn't require JWT
+    const { token } = await apiClient.post<{ token: string }>('/auth/forgot-password', { email: email.value })
+    message.value = 'Falls ein Benutzer mit dieser E-Mail existiert, wurde eine E-Mail gesendet. (Token zur Simulation: ' + token + ')'
   } catch {
-    error.value = 'Ungültige Anmeldedaten oder Konto deaktiviert.'
+    error.value = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
   } finally {
     loading.value = false
   }
@@ -133,6 +116,12 @@ async function handleLogin() {
 
 .error-message {
   color: #dc2626;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.info-message {
+  color: #16a34a;
   font-size: 0.875rem;
   margin: 0;
 }

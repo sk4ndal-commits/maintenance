@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<AssignmentHistory> AssignmentHistories => Set<AssignmentHistory>();
     public DbSet<ChecklistStep> ChecklistSteps => Set<ChecklistStep>();
     public DbSet<MaintenanceDocument> MaintenanceDocuments => Set<MaintenanceDocument>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,6 +80,12 @@ public class AppDbContext : DbContext
             e.Property(d => d.ContentType).IsRequired().HasMaxLength(200);
             e.Property(d => d.UploadedBy).IsRequired().HasMaxLength(200);
             e.Property(d => d.Notes).HasMaxLength(2000);
+        });
+
+        modelBuilder.Entity<PasswordResetToken>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.TokenHash).IsRequired().HasMaxLength(500);
         });
     }
 }
