@@ -26,6 +26,7 @@ const showWoForm = ref(false)
 const showEditForm = ref(false)
 const assigningWoId = ref<string | null>(null)
 const auditLogs = ref<AuditLog[]>([])
+const activeTab = ref('overview')
 
 onMounted(async () => {
   loading.value = true
@@ -93,32 +94,44 @@ function statusClass(status: WorkOrderStatus): string {
         <button class="btn btn--secondary" @click="showEditForm = true">{{ t('form.editTitle') }}</button>
       </div>
 
-      <div class="asset-detail__layout">
-        <!-- Left: asset info + work orders -->
-        <div class="asset-detail__main">
-          <div class="asset-detail__card">
-            <h2 class="asset-detail__section-title">Audit Logs</h2>
-            <AuditLogTable :logs="auditLogs" />
-          </div>
-          <div class="asset-detail__card">
-            <div class="asset-detail__row">
-              <span class="asset-detail__label">{{ t('detail.location') }}</span>
-              <span>📍 {{ asset.location }}</span>
-            </div>
-            <div v-if="asset.description" class="asset-detail__row">
-              <span class="asset-detail__label">{{ t('detail.description') }}</span>
-              <span>{{ asset.description }}</span>
-            </div>
-            <div class="asset-detail__row">
-              <span class="asset-detail__label">{{ t('detail.created') }}</span>
-              <span>{{ new Date(asset.createdAt).toLocaleDateString(locale) }}</span>
-            </div>
-            <div class="asset-detail__row">
-              <span class="asset-detail__label">{{ t('detail.qrCode') }}</span>
-              <code>{{ asset.qrCodePayload }}</code>
-            </div>
-          </div>
+      <nav class="asset-detail__tabs">
+        <button :class="['tab', { 'tab--active': activeTab === 'overview' }]" @click="activeTab = 'overview'">Overview</button>
+        <button :class="['tab', { 'tab--active': activeTab === 'workorders' }]" @click="activeTab = 'workorders'">Work Orders</button>
+        <button :class="['tab', { 'tab--active': activeTab === 'history' }]" @click="activeTab = 'history'">History</button>
+        <button :class="['tab', { 'tab--active': activeTab === 'audit' }]" @click="activeTab = 'audit'">Audit</button>
+      </nav>
 
+      <div class="asset-detail__content">
+        <!-- Overview Tab -->
+        <div v-if="activeTab === 'overview'" class="asset-detail__layout">
+          <div class="asset-detail__main">
+            <div class="asset-detail__card">
+              <div class="asset-detail__row">
+                <span class="asset-detail__label">{{ t('detail.location') }}</span>
+                <span>📍 {{ asset.location }}</span>
+              </div>
+              <div v-if="asset.description" class="asset-detail__row">
+                <span class="asset-detail__label">{{ t('detail.description') }}</span>
+                <span>{{ asset.description }}</span>
+              </div>
+              <div class="asset-detail__row">
+                <span class="asset-detail__label">{{ t('detail.created') }}</span>
+                <span>{{ new Date(asset.createdAt).toLocaleDateString(locale) }}</span>
+              </div>
+              <div class="asset-detail__row">
+                <span class="asset-detail__label">{{ t('detail.qrCode') }}</span>
+                <code>{{ asset.qrCodePayload }}</code>
+              </div>
+            </div>
+          </div>
+          <aside class="asset-detail__sidebar">
+            <h3 class="asset-detail__sidebar-title">{{ t('qr.title') }}</h3>
+            <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" />
+          </aside>
+        </div>
+
+        <!-- Work Orders Tab -->
+        <div v-if="activeTab === 'workorders'">
           <section class="asset-detail__wo-section">
             <div class="asset-detail__section-header">
               <h2 class="asset-detail__section-title">{{ t('detail.workOrders') }}</h2>
@@ -126,7 +139,6 @@ function statusClass(status: WorkOrderStatus): string {
                 {{ t('wo.create') }}
               </button>
             </div>
-
 
             <p v-if="workOrders.length === 0" class="asset-detail__empty">
               {{ t('detail.noWorkOrders') }}
@@ -169,19 +181,23 @@ function statusClass(status: WorkOrderStatus): string {
               </div>
             </div>
           </section>
+        </div>
 
-          <!-- History section -->
+        <!-- History Tab -->
+        <div v-if="activeTab === 'history'">
           <section class="asset-detail__history-section">
             <h2 class="asset-detail__section-title">{{ t('history.title') }}</h2>
             <AssetHistoryTimeline :asset-id="asset.assetId" />
           </section>
         </div>
 
-        <!-- Right: QR sidebar -->
-        <aside class="asset-detail__sidebar">
-          <h3 class="asset-detail__sidebar-title">{{ t('qr.title') }}</h3>
-          <QrCodePanel :asset-id="asset.assetId" :asset-name="asset.name" />
-        </aside>
+        <!-- Audit Tab -->
+        <div v-if="activeTab === 'audit'">
+          <div class="asset-detail__card">
+            <h2 class="asset-detail__section-title">Audit Logs</h2>
+            <AuditLogTable :logs="auditLogs" />
+          </div>
+        </div>
       </div>
 
       <!-- WO Create Modal -->
@@ -249,17 +265,32 @@ function statusClass(status: WorkOrderStatus): string {
   font-weight: 700;
 }
 
-.asset-detail__layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 32px;
-  align-items: start;
+.asset-detail__tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.asset-detail__main {
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.tab--active {
+  color: #111827;
+  border-bottom-color: #2563eb;
+}
+
+.asset-detail__content {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .asset-detail__card {
