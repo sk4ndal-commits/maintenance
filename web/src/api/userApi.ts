@@ -66,4 +66,10 @@ export const userApi = {
       method: 'PATCH',
       body: JSON.stringify({ newPassword }),
     }),
+
+  invite: (name: string, email: string, role: string): Promise<void> =>
+    requestNoContent('/api/users/invite', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, role }),
+    }),
 }

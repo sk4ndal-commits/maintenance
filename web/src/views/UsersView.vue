@@ -3,6 +3,7 @@
     <div class="view-header">
       <h1>Benutzerverwaltung</h1>
       <button class="btn-primary" @click="openCreateModal">+ Benutzer anlegen</button>
+      <button class="btn-secondary" @click="openInviteModal">+ Benutzer einladen</button>
     </div>
 
     <div v-if="error" class="error-banner">{{ error }}</div>
@@ -45,43 +46,35 @@
 
     <!-- Create / Edit Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <!-- ... -->
+    </div>
+
+    <!-- Invite Modal -->
+    <div v-if="showInviteModal" class="modal-overlay" @click.self="closeInviteModal">
       <div class="modal">
-        <h2>{{ editingUser ? 'Benutzer bearbeiten' : 'Neuen Benutzer anlegen' }}</h2>
-        <form @submit.prevent="handleSubmit" class="modal-form">
+        <h2>Benutzer einladen</h2>
+        <form @submit.prevent="handleInvite" class="modal-form">
           <div class="form-group">
             <label>Name</label>
-            <input v-model="form.name" type="text" required placeholder="Vollständiger Name" />
+            <input v-model="inviteForm.name" type="text" required placeholder="Vollständiger Name" />
           </div>
           <div class="form-group">
             <label>E-Mail</label>
-            <input v-model="form.email" type="email" required placeholder="name@example.com" />
-          </div>
-          <div v-if="!editingUser" class="form-group">
-            <label>Passwort</label>
-            <input v-model="form.password" type="password" required placeholder="••••••••" />
+            <input v-model="inviteForm.email" type="email" required placeholder="name@example.com" />
           </div>
           <div class="form-group">
             <label>Rolle</label>
-            <select v-model="form.role" required>
+            <select v-model="inviteForm.role" required>
               <option value="Admin">Admin</option>
               <option value="Planner">Planner</option>
               <option value="Technician">Technician</option>
             </select>
           </div>
-          <div v-if="editingUser" class="form-group">
-            <button type="button" class="btn-secondary" @click="showResetSection = !showResetSection">
-              {{ showResetSection ? 'Passwort zurücksetzen ausblenden' : 'Passwort zurücksetzen' }}
-            </button>
-          </div>
-          <div v-if="showResetSection" class="form-group">
-            <label>Neues Passwort</label>
-            <input v-model="newPassword" type="password" placeholder="••••••••" />
-          </div>
           <p v-if="formError" class="error-message">{{ formError }}</p>
           <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="closeModal">Abbrechen</button>
+            <button type="button" class="btn-secondary" @click="closeInviteModal">Abbrechen</button>
             <button type="submit" class="btn-primary" :disabled="saving">
-              {{ saving ? 'Speichern...' : 'Speichern' }}
+              {{ saving ? 'Einladen...' : 'Einladen' }}
             </button>
           </div>
         </form>
@@ -98,6 +91,7 @@ import type { User } from '../types/asset'
 const users = ref<User[]>([])
 const error = ref('')
 const showModal = ref(false)
+const showInviteModal = ref(false)
 const editingUser = ref<User | null>(null)
 const saving = ref(false)
 const formError = ref('')
@@ -105,6 +99,31 @@ const showResetSection = ref(false)
 const newPassword = ref('')
 
 const form = ref({ name: '', email: '', password: '', role: 'Technician' })
+const inviteForm = ref({ name: '', email: '', role: 'Technician' })
+
+function openInviteModal() {
+  inviteForm.value = { name: '', email: '', role: 'Technician' }
+  showInviteModal.value = true
+  formError.value = ''
+}
+
+function closeInviteModal() {
+  showInviteModal.value = false
+}
+
+async function handleInvite() {
+  saving.value = true
+  formError.value = ''
+  try {
+    await userApi.invite(inviteForm.value.name, inviteForm.value.email, inviteForm.value.role)
+    closeInviteModal()
+    await loadUsers()
+  } catch (e) {
+    formError.value = 'Fehler beim Einladen des Benutzers.'
+  } finally {
+    saving.value = false
+  }
+}
 
 async function loadUsers() {
   try {

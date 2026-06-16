@@ -69,9 +69,18 @@ public class UsersController : ControllerBase
         await handler.HandleAsync(id, req.NewPassword);
         return NoContent();
     }
+
+    [HttpPost("invite")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Invite([FromBody] InviteRequest req, [FromServices] InviteUserHandler handler)
+    {
+        await handler.HandleAsync(req.Name, req.Email, req.Role);
+        return NoContent();
+    }
 }
 
 public record RegisterRequest(string Name, string Email, string Password);
 public record LoginRequest(string Email, string Password);
 public record SetActiveRequest(bool IsActive);
 public record AdminResetPasswordRequest(string NewPassword);
+public record InviteRequest(string Name, string Email, string Role);
