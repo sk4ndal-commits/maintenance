@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<MaintenanceDocument> MaintenanceDocuments => Set<MaintenanceDocument>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -93,6 +94,13 @@ public class AppDbContext : DbContext
         {
             e.HasKey(r => r.Id);
             e.Property(r => r.Token).IsRequired().HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<Notification>(e =>
+        {
+            e.HasKey(n => n.Id);
+            e.Property(n => n.Message).IsRequired().HasMaxLength(1000);
+            e.Property(n => n.Type).IsRequired().HasMaxLength(50);
         });
     }
 }
