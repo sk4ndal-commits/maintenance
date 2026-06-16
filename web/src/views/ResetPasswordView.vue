@@ -1,12 +1,44 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { apiClient } from '../api/apiClient'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const token = route.query.token as string
+const newPassword = ref('')
+const error = ref('')
+const loading = ref(false)
+
+async function handleResetPassword() {
+  if (!token) {
+    error.value = t('auth.resetPassword.error')
+    return
+  }
+  error.value = ''
+  loading.value = true
+  try {
+    await apiClient.post('/auth/reset-password', { token, newPassword: newPassword.value })
+    router.push('/login')
+  } catch {
+    error.value = t('auth.resetPassword.error')
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">Neues Passwort</h1>
-      <p class="login-subtitle">Geben Sie ein neues Passwort für Ihr Konto ein.</p>
+      <h1 class="login-title">{{ t('auth.resetPassword.title') }}</h1>
+      <p class="login-subtitle">{{ t('auth.resetPassword.subtitle') }}</p>
 
       <form @submit.prevent="handleResetPassword" class="login-form">
         <div class="form-group">
-          <label for="password">Neues Passwort</label>
+          <label for="password">{{ t('auth.resetPassword.password') }}</label>
           <input
             id="password"
             v-model="newPassword"
@@ -19,42 +51,12 @@
         <p v-if="error" class="error-message">{{ error }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Speichern...' : 'Passwort speichern' }}
+          {{ loading ? t('auth.resetPassword.saving') : t('auth.resetPassword.save') }}
         </button>
       </form>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { apiClient } from '../api/apiClient'
-
-const route = useRoute()
-const router = useRouter()
-const token = route.query.token as string
-const newPassword = ref('')
-const error = ref('')
-const loading = ref(false)
-
-async function handleResetPassword() {
-  if (!token) {
-    error.value = 'Ungültiger Reset-Token.'
-    return
-  }
-  error.value = ''
-  loading.value = true
-  try {
-    await apiClient.post('/auth/reset-password', { token, newPassword: newPassword.value })
-    router.push('/login')
-  } catch {
-    error.value = 'Fehler beim Zurücksetzen des Passworts. Möglicherweise ist das Token abgelaufen.'
-  } finally {
-    loading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .login-page {

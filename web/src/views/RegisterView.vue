@@ -1,24 +1,55 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userApi } from '../api/userApi'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const router = useRouter()
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const success = ref('')
+const loading = ref(false)
+
+async function handleRegister() {
+  error.value = ''
+  success.value = ''
+  loading.value = true
+  try {
+    await userApi.register(name.value, email.value, password.value)
+    success.value = t('auth.register.success')
+    setTimeout(() => router.push('/login'), 1500)
+  } catch {
+    error.value = t('auth.register.error')
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">Maintenance System</h1>
-      <p class="login-subtitle">Neues Konto erstellen</p>
+      <h1 class="login-title">{{ t('auth.register.title') }}</h1>
+      <p class="login-subtitle">{{ t('auth.register.subtitle') }}</p>
 
       <form @submit.prevent="handleRegister" class="login-form">
         <div class="form-group">
-          <label for="name">Name</label>
+          <label for="name">{{ t('auth.register.name') }}</label>
           <input
             id="name"
             v-model="name"
             type="text"
-            placeholder="Vor- und Nachname"
+            :placeholder="t('auth.register.namePlaceholder')"
             required
             autocomplete="name"
           />
         </div>
 
         <div class="form-group">
-          <label for="email">E-Mail</label>
+          <label for="email">{{ t('auth.register.email') }}</label>
           <input
             id="email"
             v-model="email"
@@ -30,7 +61,7 @@
         </div>
 
         <div class="form-group">
-          <label for="password">Passwort</label>
+          <label for="password">{{ t('auth.register.password') }}</label>
           <input
             id="password"
             v-model="password"
@@ -46,46 +77,17 @@
         <p v-if="success" class="success-message">{{ success }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Registrieren...' : 'Registrieren' }}
+          {{ loading ? t('auth.register.registering') : t('auth.register.register') }}
         </button>
       </form>
 
       <p class="login-link">
-        Bereits ein Konto?
-        <RouterLink to="/login">Anmelden</RouterLink>
+        {{ t('auth.register.alreadyHaveAccount') }}
+        <RouterLink to="/login">{{ t('auth.register.signIn') }}</RouterLink>
       </p>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { userApi } from '../api/userApi'
-
-const router = useRouter()
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const success = ref('')
-const loading = ref(false)
-
-async function handleRegister() {
-  error.value = ''
-  success.value = ''
-  loading.value = true
-  try {
-    await userApi.register(name.value, email.value, password.value)
-    success.value = 'Konto erfolgreich erstellt. Sie werden weitergeleitet…'
-    setTimeout(() => router.push('/login'), 1500)
-  } catch {
-    error.value = 'Registrierung fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.'
-  } finally {
-    loading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .login-page {

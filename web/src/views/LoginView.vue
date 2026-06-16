@@ -1,58 +1,10 @@
-<template>
-  <div class="login-page">
-    <div class="login-card">
-      <h1 class="login-title">Maintenance System</h1>
-      <p class="login-subtitle">Bitte melden Sie sich an</p>
-
-      <form @submit.prevent="handleLogin" class="login-form">
-        <div class="form-group">
-          <label for="email">E-Mail</label>
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            placeholder="name@example.com"
-            required
-            autocomplete="email"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="password">Passwort</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            autocomplete="current-password"
-          />
-        </div>
-
-        <p v-if="error" class="error-message">{{ error }}</p>
-
-        <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Anmelden...' : 'Anmelden' }}
-        </button>
-      </form>
-
-      <p class="login-link">
-        <RouterLink to="/forgot-password">Passwort vergessen?</RouterLink>
-      </p>
-
-      <p class="login-link">
-        Noch kein Konto?
-        <RouterLink to="/register">Registrieren</RouterLink>
-      </p>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi } from '../api/userApi'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const email = ref('')
 const password = ref('')
@@ -67,12 +19,62 @@ async function handleLogin() {
     localStorage.setItem('jwt', token)
     router.push('/assets')
   } catch {
-    error.value = 'Ungültige Anmeldedaten oder Konto deaktiviert.'
+    error.value = t('auth.login.error')
   } finally {
     loading.value = false
   }
 }
 </script>
+
+<template>
+  <div class="login-page">
+    <div class="login-card">
+      <h1 class="login-title">{{ t('auth.login.title') }}</h1>
+      <p class="login-subtitle">{{ t('auth.login.subtitle') }}</p>
+
+      <form @submit.prevent="handleLogin" class="login-form">
+        <div class="form-group">
+          <label for="email">{{ t('auth.login.email') }}</label>
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            placeholder="name@example.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">{{ t('auth.login.password') }}</label>
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <p v-if="error" class="error-message">{{ error }}</p>
+
+        <button type="submit" class="btn-primary" :disabled="loading">
+          {{ loading ? t('auth.login.signingIn') : t('auth.login.signIn') }}
+        </button>
+      </form>
+
+      <p class="login-link">
+        <RouterLink to="/forgot-password">{{ t('auth.login.forgotPassword') }}</RouterLink>
+      </p>
+
+      <p class="login-link">
+        {{ t('auth.login.noAccount') }}
+        <RouterLink to="/register">{{ t('auth.login.register') }}</RouterLink>
+      </p>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .login-page {

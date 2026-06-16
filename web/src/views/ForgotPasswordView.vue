@@ -1,12 +1,39 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { apiClient } from '../api/apiClient'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const email = ref('')
+const message = ref('')
+const error = ref('')
+const loading = ref(false)
+
+async function handleForgotPassword() {
+  error.value = ''
+  message.value = ''
+  loading.value = true
+  try {
+    // Calling API directly since auth is separate and doesn't require JWT
+    const { token } = await apiClient.post<{ token: string }>('/auth/forgot-password', { email: email.value })
+    message.value = t('auth.forgotPassword.message') + ' (Token: ' + token + ')'
+  } catch {
+    error.value = t('auth.forgotPassword.error')
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">Passwort vergessen</h1>
-      <p class="login-subtitle">Geben Sie Ihre E-Mail-Adresse ein, um einen Reset-Link zu erhalten.</p>
+      <h1 class="login-title">{{ t('auth.forgotPassword.title') }}</h1>
+      <p class="login-subtitle">{{ t('auth.forgotPassword.subtitle') }}</p>
 
       <form @submit.prevent="handleForgotPassword" class="login-form">
         <div class="form-group">
-          <label for="email">E-Mail</label>
+          <label for="email">{{ t('auth.forgotPassword.email') }}</label>
           <input
             id="email"
             v-model="email"
@@ -21,41 +48,16 @@
         <p v-if="error" class="error-message">{{ error }}</p>
 
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Senden...' : 'Reset-Link senden' }}
+          {{ loading ? t('auth.forgotPassword.sending') : t('auth.forgotPassword.send') }}
         </button>
       </form>
 
       <p class="login-link">
-        <RouterLink to="/login">Zurück zum Login</RouterLink>
+        <RouterLink to="/login">{{ t('auth.forgotPassword.backToLogin') }}</RouterLink>
       </p>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { apiClient } from '../api/apiClient'
-
-const email = ref('')
-const message = ref('')
-const error = ref('')
-const loading = ref(false)
-
-async function handleForgotPassword() {
-  error.value = ''
-  message.value = ''
-  loading.value = true
-  try {
-    // Calling API directly since auth is separate and doesn't require JWT
-    const { token } = await apiClient.post<{ token: string }>('/auth/forgot-password', { email: email.value })
-    message.value = 'Falls ein Benutzer mit dieser E-Mail existiert, wurde eine E-Mail gesendet. (Token zur Simulation: ' + token + ')'
-  } catch {
-    error.value = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
-  } finally {
-    loading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .login-page {

@@ -109,6 +109,92 @@ export default {
     qrCode: 'QR',
     edit: 'Edit',
   },
+  users: {
+    title: 'User Management',
+    create: '+ Create User',
+    invite: '+ Invite User',
+    table: {
+      name: 'Name',
+      email: 'Email',
+      role: 'Role',
+      status: 'Status',
+      actions: 'Actions',
+    },
+    status: {
+      active: 'Active',
+      inactive: 'Inactive',
+    },
+    actions: {
+      edit: 'Edit',
+      deactivate: 'Deactivate',
+      activate: 'Activate',
+    },
+    empty: 'No users found.',
+    errorUpdating: 'Failed to update status.',
+    modal: {
+      createTitle: 'Create User',
+      editTitle: 'Edit User',
+      name: 'Name',
+      namePlaceholder: 'Full name',
+      email: 'Email',
+      emailPlaceholder: 'name@example.com',
+      password: 'Password',
+      role: 'Role',
+      resetPassword: 'Reset password',
+      newPassword: 'New password',
+      cancel: 'Cancel',
+      save: 'Save',
+      saving: 'Saving...',
+      inviteTitle: 'Invite User',
+      inviteBtn: 'Invite',
+    }
+  },
+  auth: {
+    login: {
+      title: 'Maintenance System',
+      subtitle: 'Please sign in',
+      email: 'Email',
+      password: 'Password',
+      signIn: 'Sign In',
+      signingIn: 'Signing in...',
+      forgotPassword: 'Forgot password?',
+      noAccount: 'No account yet?',
+      register: 'Register',
+      error: 'Invalid credentials or account deactivated.'
+    },
+    register: {
+      title: 'Maintenance System',
+      subtitle: 'Create a new account',
+      name: 'Name',
+      namePlaceholder: 'Full name',
+      email: 'Email',
+      password: 'Password',
+      register: 'Register',
+      registering: 'Registering...',
+      alreadyHaveAccount: 'Already have an account?',
+      signIn: 'Sign In',
+      success: 'Account created successfully. Redirecting...',
+      error: 'Registration failed. Please check your inputs.'
+    },
+    forgotPassword: {
+      title: 'Forgot password',
+      subtitle: 'Enter your email address to receive a reset link.',
+      email: 'Email',
+      send: 'Send reset link',
+      sending: 'Sending...',
+      backToLogin: 'Back to login',
+      message: 'If a user with this email exists, an email has been sent.',
+      error: 'An error occurred. Please try again later.'
+    },
+    resetPassword: {
+      title: 'New password',
+      subtitle: 'Enter a new password for your account.',
+      password: 'New password',
+      save: 'Save password',
+      saving: 'Saving...',
+      error: 'Failed to reset password. The token might have expired.'
+    }
+  },
   common: {
     collapse: 'Collapse',
     expand: 'Expand',

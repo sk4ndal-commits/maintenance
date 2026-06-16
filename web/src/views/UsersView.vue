@@ -1,9 +1,9 @@
 <template>
   <div class="users-view">
     <div class="view-header">
-      <h1>Benutzerverwaltung</h1>
-      <button class="btn-primary" @click="openCreateModal">+ Benutzer anlegen</button>
-      <button class="btn-secondary" @click="openInviteModal">+ Benutzer einladen</button>
+      <h1>{{ t('users.title') }}</h1>
+      <button class="btn-primary" @click="openCreateModal">{{ t('users.create') }}</button>
+      <button class="btn-secondary" @click="openInviteModal">{{ t('users.invite') }}</button>
     </div>
 
     <div v-if="error" class="error-banner">{{ error }}</div>
@@ -11,11 +11,11 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>E-Mail</th>
-          <th>Rolle</th>
-          <th>Status</th>
-          <th>Aktionen</th>
+          <th>{{ t('users.table.name') }}</th>
+          <th>{{ t('users.table.email') }}</th>
+          <th>{{ t('users.table.role') }}</th>
+          <th>{{ t('users.table.status') }}</th>
+          <th>{{ t('users.table.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -25,45 +25,83 @@
           <td><span class="badge badge-role">{{ user.role }}</span></td>
           <td>
             <span :class="['badge', user.isActive ? 'badge-success' : 'badge-danger']">
-              {{ user.isActive ? 'Aktiv' : 'Inaktiv' }}
+              {{ user.isActive ? t('users.status.active') : t('users.status.inactive') }}
             </span>
           </td>
           <td class="actions">
-            <button class="btn-secondary" @click="openEditModal(user)">Bearbeiten</button>
+            <button class="btn-secondary" @click="openEditModal(user)">{{ t('users.actions.edit') }}</button>
             <button
               :class="user.isActive ? 'btn-danger' : 'btn-success'"
               @click="toggleActive(user)"
             >
-              {{ user.isActive ? 'Deaktivieren' : 'Aktivieren' }}
+              {{ user.isActive ? t('users.actions.deactivate') : t('users.actions.activate') }}
             </button>
           </td>
         </tr>
         <tr v-if="users.length === 0">
-          <td colspan="5" class="empty-state">Keine Benutzer vorhanden.</td>
+          <td colspan="5" class="empty-state">{{ t('users.empty') }}</td>
         </tr>
       </tbody>
     </table>
 
     <!-- Create / Edit Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <!-- ... -->
+      <div class="modal">
+        <h2>{{ editingUser ? t('users.modal.editTitle') : t('users.modal.createTitle') }}</h2>
+        <form @submit.prevent="handleSubmit" class="modal-form">
+          <div class="form-group">
+            <label>{{ t('users.modal.name') }}</label>
+            <input v-model="form.name" type="text" required :placeholder="t('users.modal.namePlaceholder')" />
+          </div>
+          <div class="form-group">
+            <label>{{ t('users.modal.email') }}</label>
+            <input v-model="form.email" type="email" required :placeholder="t('users.modal.emailPlaceholder')" />
+          </div>
+          <div class="form-group" v-if="!editingUser">
+            <label>{{ t('users.modal.password') }}</label>
+            <input v-model="form.password" type="password" required placeholder="••••••••" />
+          </div>
+          <div class="form-group">
+            <label>{{ t('users.modal.role') }}</label>
+            <select v-model="form.role" required>
+              <option value="Admin">Admin</option>
+              <option value="Planner">Planner</option>
+              <option value="Technician">Technician</option>
+            </select>
+          </div>
+          <div class="form-group" v-if="editingUser">
+            <label>
+              <input type="checkbox" v-model="showResetSection" />
+              {{ t('users.modal.resetPassword') }}
+            </label>
+            <input v-if="showResetSection" v-model="newPassword" type="password" :placeholder="t('users.modal.newPassword')" />
+          </div>
+          <p v-if="formError" class="error-message">{{ formError }}</p>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" @click="closeModal">{{ t('users.modal.cancel') }}</button>
+            <button type="submit" class="btn-primary" :disabled="saving">
+              {{ saving ? t('users.modal.saving') : t('users.modal.save') }}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Invite Modal -->
     <div v-if="showInviteModal" class="modal-overlay" @click.self="closeInviteModal">
       <div class="modal">
-        <h2>Benutzer einladen</h2>
+        <h2>{{ t('users.modal.inviteTitle') }}</h2>
         <form @submit.prevent="handleInvite" class="modal-form">
           <div class="form-group">
-            <label>Name</label>
-            <input v-model="inviteForm.name" type="text" required placeholder="Vollständiger Name" />
+            <label>{{ t('users.modal.name') }}</label>
+            <input v-model="inviteForm.name" type="text" required :placeholder="t('users.modal.namePlaceholder')" />
           </div>
           <div class="form-group">
-            <label>E-Mail</label>
-            <input v-model="inviteForm.email" type="email" required placeholder="name@example.com" />
+            <label>{{ t('users.modal.email') }}</label>
+            <input v-model="inviteForm.email" type="email" required :placeholder="t('users.modal.emailPlaceholder')" />
           </div>
           <div class="form-group">
-            <label>Rolle</label>
+            <label>{{ t('users.modal.role') }}</label>
             <select v-model="inviteForm.role" required>
               <option value="Admin">Admin</option>
               <option value="Planner">Planner</option>
@@ -72,9 +110,9 @@
           </div>
           <p v-if="formError" class="error-message">{{ formError }}</p>
           <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="closeInviteModal">Abbrechen</button>
+            <button type="button" class="btn-secondary" @click="closeInviteModal">{{ t('users.modal.cancel') }}</button>
             <button type="submit" class="btn-primary" :disabled="saving">
-              {{ saving ? 'Einladen...' : 'Einladen' }}
+              {{ saving ? t('users.modal.saving') : t('users.modal.inviteBtn') }}
             </button>
           </div>
         </form>
@@ -86,6 +124,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { userApi } from '../api/userApi'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import type { User } from '../types/asset'
 
 const users = ref<User[]>([])
@@ -177,7 +218,7 @@ async function handleSubmit() {
     closeModal()
     await loadUsers()
   } catch {
-    formError.value = 'Fehler beim Speichern. Bitte erneut versuchen.'
+    formError.value = t('assets.form.errorUnknown') // Using existing generic error
   } finally {
     saving.value = false
   }
@@ -188,7 +229,7 @@ async function toggleActive(user: User) {
     await userApi.setActive(user.technicianId, !user.isActive)
     await loadUsers()
   } catch {
-    error.value = 'Status konnte nicht geändert werden.'
+    error.value = t('users.errorUpdating')
   }
 }
 

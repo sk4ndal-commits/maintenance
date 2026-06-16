@@ -409,6 +409,12 @@ function onAssigned(wo: WorkOrder) {
   width: 100%;
 }
 
+.asset-detail__layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
 @media (max-width: 700px) {
   .asset-detail__layout {
     grid-template-columns: 1fr;

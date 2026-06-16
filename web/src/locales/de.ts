@@ -109,6 +109,92 @@ export default {
     qrCode: 'QR',
     edit: 'Bearbeiten',
   },
+  users: {
+    title: 'Benutzerverwaltung',
+    create: '+ Benutzer anlegen',
+    invite: '+ Benutzer einladen',
+    table: {
+      name: 'Name',
+      email: 'E-Mail',
+      role: 'Rolle',
+      status: 'Status',
+      actions: 'Aktionen',
+    },
+    status: {
+      active: 'Aktiv',
+      inactive: 'Inaktiv',
+    },
+    actions: {
+      edit: 'Bearbeiten',
+      deactivate: 'Deaktivieren',
+      activate: 'Aktivieren',
+    },
+    empty: 'Keine Benutzer vorhanden.',
+    errorUpdating: 'Status konnte nicht geändert werden.',
+    modal: {
+      createTitle: 'Benutzer erstellen',
+      editTitle: 'Benutzer bearbeiten',
+      name: 'Name',
+      namePlaceholder: 'Vollständiger Name',
+      email: 'E-Mail',
+      emailPlaceholder: 'name@example.com',
+      password: 'Passwort',
+      role: 'Rolle',
+      resetPassword: 'Passwort zurücksetzen',
+      newPassword: 'Neues Passwort',
+      cancel: 'Abbrechen',
+      save: 'Speichern',
+      saving: 'Speichern...',
+      inviteTitle: 'Benutzer einladen',
+      inviteBtn: 'Einladen',
+    }
+  },
+  auth: {
+    login: {
+      title: 'Maintenance System',
+      subtitle: 'Bitte melden Sie sich an',
+      email: 'E-Mail',
+      password: 'Passwort',
+      signIn: 'Anmelden',
+      signingIn: 'Anmelden...',
+      forgotPassword: 'Passwort vergessen?',
+      noAccount: 'Noch kein Konto?',
+      register: 'Registrieren',
+      error: 'Ungültige Anmeldedaten oder Konto deaktiviert.'
+    },
+    register: {
+      title: 'Maintenance System',
+      subtitle: 'Neues Konto erstellen',
+      name: 'Name',
+      namePlaceholder: 'Vor- und Nachname',
+      email: 'E-Mail',
+      password: 'Passwort',
+      register: 'Registrieren',
+      registering: 'Registrieren...',
+      alreadyHaveAccount: 'Bereits ein Konto?',
+      signIn: 'Anmelden',
+      success: 'Konto erfolgreich erstellt. Sie werden weitergeleitet…',
+      error: 'Registrierung fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.'
+    },
+    forgotPassword: {
+      title: 'Passwort vergessen',
+      subtitle: 'Geben Sie Ihre E-Mail-Adresse ein, um einen Reset-Link zu erhalten.',
+      email: 'E-Mail',
+      send: 'Reset-Link senden',
+      sending: 'Senden...',
+      backToLogin: 'Zurück zum Login',
+      message: 'Falls ein Benutzer mit dieser E-Mail existiert, wurde eine E-Mail gesendet.',
+      error: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
+    },
+    resetPassword: {
+      title: 'Neues Passwort',
+      subtitle: 'Geben Sie ein neues Passwort für Ihr Konto ein.',
+      password: 'Neues Passwort',
+      save: 'Passwort speichern',
+      saving: 'Speichern...',
+      error: 'Fehler beim Zurücksetzen des Passworts. Möglicherweise ist das Token abgelaufen.'
+    }
+  },
   common: {
     collapse: 'Einklappen',
     expand: 'Ausklappen',
