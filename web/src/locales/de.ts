@@ -109,4 +109,8 @@ export default {
     qrCode: 'QR',
     edit: 'Bearbeiten',
   },
+  common: {
+    collapse: 'Einklappen',
+    expand: 'Ausklappen',
+  },
 }

@@ -7,7 +7,7 @@ import type { Asset, WorkOrder, WorkOrderStatus } from '../types/asset'
 import QrCodePanel from '../components/assets/QrCodePanel.vue'
 import WorkOrderCreateForm from '../components/workorders/WorkOrderCreateForm.vue'
 import WorkOrderAssignForm from '../components/workorders/WorkOrderAssignForm.vue'
-import WorkOrderChecklistForm from '../components/workorders/WorkOrderChecklistForm.vue'
+import WorkOrderCard from '../components/workorders/WorkOrderCard.vue'
 import AssetEditForm from '../components/assets/AssetEditForm.vue'
 import AssetHistoryTimeline from '../components/assets/AssetHistoryTimeline.vue'
 import AuditLogTable from '../components/common/AuditLogTable.vue'
@@ -56,23 +56,6 @@ function onAssigned(wo: WorkOrder) {
   assigningWoId.value = null
   const idx = workOrders.value.findIndex(w => w.workOrderId === wo.workOrderId)
   if (idx !== -1) workOrders.value[idx] = wo
-}
-
-function priorityClass(priority: string): string {
-  return {
-    High:   'badge--priority-high',
-    Medium: 'badge--priority-medium',
-    Low:    'badge--priority-low',
-  }[priority] ?? ''
-}
-
-function statusClass(status: WorkOrderStatus): string {
-  return {
-    Open: 'badge--warning',
-    Assigned: 'badge--info',
-    InProgress: 'badge--primary',
-    Done: 'badge--success',
-  }[status] ?? ''
 }
 </script>
 
@@ -145,40 +128,12 @@ function statusClass(status: WorkOrderStatus): string {
             </p>
 
             <div v-else class="asset-detail__wo-list">
-              <div v-for="wo in workOrders" :key="wo.workOrderId" class="asset-detail__wo-card">
-                <div class="asset-detail__wo-header">
-                  <span :class="['badge', statusClass(wo.status)]">{{ t(`wo.status.${wo.status}`) }}</span>
-                  <span class="asset-detail__wo-date">
-                    {{ new Date(wo.createdAt).toLocaleDateString(locale) }}
-                  </span>
-                </div>
-                <strong class="asset-detail__wo-title">{{ wo.title }}</strong>
-                <div class="asset-detail__wo-meta">
-                  <span :class="['badge', 'badge--priority', priorityClass(wo.priority)]">{{ t(`wo.priority${wo.priority}`) }}</span>
-                  <span v-if="wo.assignedTechnicianName" class="asset-detail__wo-assignee">
-                    {{ t('wo.assignedTo') }}: {{ wo.assignedTechnicianName }}
-                  </span>
-                  <span v-else class="asset-detail__wo-assignee asset-detail__wo-assignee--none">
-                    {{ t('wo.unassigned') }}
-                  </span>
-                </div>
-                <div v-if="wo.status === 'Done'" class="asset-detail__wo-completion">
-                  <span class="asset-detail__wo-completed-at">
-                    {{ t('wo.completedAt') }}: {{ wo.completedAt ? new Date(wo.completedAt).toLocaleDateString(locale) : '—' }}
-                  </span>
-                  <span v-if="wo.completionNotes" class="asset-detail__wo-completion-notes">
-                    {{ wo.completionNotes }}
-                  </span>
-                </div>
-                <button
-                  v-if="wo.status !== 'Done'"
-                  class="btn btn--secondary asset-detail__wo-assign-btn"
-                  @click="assigningWoId = wo.workOrderId"
-                >
-                  {{ wo.assignedTechnicianId ? t('wo.reassign') : t('wo.assignBtn') }}
-                </button>
-                <WorkOrderChecklistForm :work-order-id="wo.workOrderId" />
-              </div>
+              <WorkOrderCard
+                v-for="wo in workOrders"
+                :key="wo.workOrderId"
+                :work-order="wo"
+                @assign="assigningWoId = $event"
+              />
             </div>
           </section>
         </div>
