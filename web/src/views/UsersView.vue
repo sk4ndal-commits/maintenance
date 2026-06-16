@@ -68,6 +68,15 @@
               <option value="Technician">Technician</option>
             </select>
           </div>
+          <div v-if="editingUser" class="form-group">
+            <button type="button" class="btn-secondary" @click="showResetSection = !showResetSection">
+              {{ showResetSection ? 'Passwort zurücksetzen ausblenden' : 'Passwort zurücksetzen' }}
+            </button>
+          </div>
+          <div v-if="showResetSection" class="form-group">
+            <label>Neues Passwort</label>
+            <input v-model="newPassword" type="password" placeholder="••••••••" />
+          </div>
           <p v-if="formError" class="error-message">{{ formError }}</p>
           <div class="modal-actions">
             <button type="button" class="btn-secondary" @click="closeModal">Abbrechen</button>
@@ -92,6 +101,8 @@ const showModal = ref(false)
 const editingUser = ref<User | null>(null)
 const saving = ref(false)
 const formError = ref('')
+const showResetSection = ref(false)
+const newPassword = ref('')
 
 const form = ref({ name: '', email: '', password: '', role: 'Technician' })
 
@@ -114,6 +125,8 @@ function openEditModal(user: User) {
   editingUser.value = user
   form.value = { name: user.name, email: user.email, password: '', role: user.role }
   formError.value = ''
+  showResetSection.value = false
+  newPassword.value = ''
   showModal.value = true
 }
 
@@ -131,6 +144,9 @@ async function handleSubmit() {
         email: form.value.email,
         role: form.value.role,
       })
+      if (showResetSection.value && newPassword.value) {
+        await userApi.resetPassword(editingUser.value.technicianId, newPassword.value)
+      }
     } else {
       await userApi.create({
         name: form.value.name,

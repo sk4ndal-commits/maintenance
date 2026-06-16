@@ -60,4 +60,10 @@ export const userApi = {
       method: 'PATCH',
       body: JSON.stringify({ isActive }),
     }),
+
+  resetPassword: (id: string, newPassword: string): Promise<void> =>
+    requestNoContent(`/api/users/${id}/password`, {
+      method: 'PATCH',
+      body: JSON.stringify({ newPassword }),
+    }),
 }
